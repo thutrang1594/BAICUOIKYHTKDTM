@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -18,10 +17,11 @@ import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.tasks.Task;
+import com.google.android.material.textfield.TextInputEditText;
 import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.GoogleAuthProvider;
-import com.google.firebase.auth.FirebaseUser; // Import FirebaseUser
+import com.google.firebase.auth.FirebaseUser;
 
 import vn.tlu.cse.ht2.nhom16.moneymanagementapp.R;
 
@@ -33,9 +33,9 @@ public class LoginActivity extends AppCompatActivity {
     private FirebaseAuth mAuth;
     private GoogleSignInClient mGoogleSignInClient;
 
-    private EditText etEmail, etPassword; // Thêm EditText cho email và mật khẩu
-    private Button btnEmailSignIn, btnGoogleSignIn; // Nút đăng nhập email và Google
-    private TextView tvRegisterLink; // Nút/Text để chuyển sang đăng ký
+    private TextInputEditText etEmail, etPassword;
+    private Button btnEmailSignIn, btnGoogleSignIn;
+    private TextView tvRegisterLink;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,45 +44,35 @@ public class LoginActivity extends AppCompatActivity {
 
         mAuth = FirebaseAuth.getInstance();
 
-        // Cấu hình Google Sign In
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestIdToken(getString(R.string.default_web_client_id))
                 .requestEmail()
                 .build();
         mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
 
-        // Ánh xạ các View
         etEmail = findViewById(R.id.et_email);
         etPassword = findViewById(R.id.et_password);
         btnEmailSignIn = findViewById(R.id.btn_email_sign_in);
-        btnGoogleSignIn = findViewById(R.id.sign_in_button); // Đổi ID này nếu bạn muốn tên cụ thể hơn
+        btnGoogleSignIn = findViewById(R.id.sign_in_button);
         tvRegisterLink = findViewById(R.id.tv_register_link);
 
-        // Lắng nghe sự kiện cho nút đăng nhập Google
         btnGoogleSignIn.setOnClickListener(v -> signInWithGoogle());
-
-        // Lắng nghe sự kiện cho nút đăng nhập Email/Mật khẩu
         btnEmailSignIn.setOnClickListener(v -> signInWithEmail());
-
-        // Lắng nghe sự kiện cho link đăng ký
         tvRegisterLink.setOnClickListener(v -> {
             startActivity(new Intent(LoginActivity.this, RegisterActivity.class));
         });
 
-        // Kiểm tra xem người dùng đã đăng nhập chưa khi activity được tạo
         FirebaseUser currentUser = mAuth.getCurrentUser();
         if (currentUser != null) {
-            updateUI(currentUser); // Chuyển sang MainActivity nếu đã đăng nhập
+            updateUI(currentUser);
         }
     }
 
-    // Phương thức bắt đầu luồng đăng nhập Google
     private void signInWithGoogle() {
         Intent signInIntent = mGoogleSignInClient.getSignInIntent();
         startActivityForResult(signInIntent, RC_SIGN_IN);
     }
 
-    // Phương thức xử lý đăng nhập bằng Email/Mật khẩu
     private void signInWithEmail() {
         String email = etEmail.getText().toString().trim();
         String password = etPassword.getText().toString().trim();
@@ -129,7 +119,6 @@ public class LoginActivity extends AppCompatActivity {
         }
     }
 
-    // Xác thực với Firebase bằng Google ID Token
     private void firebaseAuthWithGoogle(String idToken) {
         AuthCredential credential = GoogleAuthProvider.getCredential(idToken, null);
         mAuth.signInWithCredential(credential)
@@ -147,7 +136,6 @@ public class LoginActivity extends AppCompatActivity {
                 });
     }
 
-    // Cập nhật UI và chuyển Activity
     private void updateUI(FirebaseUser user) {
         if (user != null) {
             Intent intent = new Intent(LoginActivity.this, MainActivity.class);

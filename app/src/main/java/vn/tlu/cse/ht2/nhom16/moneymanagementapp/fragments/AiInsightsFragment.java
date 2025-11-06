@@ -15,6 +15,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
 
@@ -45,7 +46,7 @@ public class AiInsightsFragment extends Fragment {
 
     private static final String TAG = "AiInsightsFragment";
 
-    private Button btnGenerateAiInsights;
+    private Button btnGenerateAiInsights, btnAutoBudget; // Thêm nút mới
     private TextView tvAiInsightsAnalysis, tvSpendingSummary, tvAdvice, tvImprovementAreas;
     private ProgressBar progressBarAiInsights;
     private CardView cardSpendingSummary, cardAdvice, cardImprovementAreas;
@@ -69,6 +70,7 @@ public class AiInsightsFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_ai_insights, container, false);
 
         btnGenerateAiInsights = view.findViewById(R.id.btn_generate_ai_insights);
+        btnAutoBudget = view.findViewById(R.id.btn_auto_budget); // Ánh xạ nút mới
         tvAiInsightsAnalysis = view.findViewById(R.id.tv_ai_insights_analysis);
         progressBarAiInsights = view.findViewById(R.id.progress_bar_ai_insights);
         tvSpendingSummary = view.findViewById(R.id.tv_spending_summary);
@@ -79,6 +81,10 @@ public class AiInsightsFragment extends Fragment {
         cardImprovementAreas = view.findViewById(R.id.card_improvement_areas);
 
         btnGenerateAiInsights.setOnClickListener(v -> generateAiInsights());
+
+        // Lắng nghe sự kiện cho nút mới
+        btnAutoBudget.setOnClickListener(v -> generateAutomaticBudget());
+
 
         // Ẩn tất cả các Card ban đầu
         cardSpendingSummary.setVisibility(View.GONE);
@@ -96,7 +102,8 @@ public class AiInsightsFragment extends Fragment {
 
         tvAiInsightsAnalysis.setText("Đang tạo gợi ý...");
         progressBarAiInsights.setVisibility(View.VISIBLE);
-        btnGenerateAiInsights.setEnabled(false); // Vô hiệu hóa nút trong khi đang xử lý
+        btnGenerateAiInsights.setEnabled(false);
+        btnAutoBudget.setEnabled(false);
 
         // Ẩn các gợi ý trước đó
         cardSpendingSummary.setVisibility(View.GONE);
@@ -113,6 +120,7 @@ public class AiInsightsFragment extends Fragment {
             mainHandler.post(() -> {
                 progressBarAiInsights.setVisibility(View.GONE);
                 btnGenerateAiInsights.setEnabled(true);
+                btnAutoBudget.setEnabled(true);
                 if (jsonResponse != null && !jsonResponse.isEmpty()) {
                     displayInsights(jsonResponse);
                 } else {
@@ -121,6 +129,104 @@ public class AiInsightsFragment extends Fragment {
             });
         }).start();
     }
+
+    private void generateAutomaticBudget() {
+        if (activity == null || !isAdded()) {
+            Toast.makeText(getContext(), "Ứng dụng chưa sẵn sàng.", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        tvAiInsightsAnalysis.setText("Đang tạo ngân sách tự động...");
+        progressBarAiInsights.setVisibility(View.VISIBLE);
+        btnGenerateAiInsights.setEnabled(false);
+        btnAutoBudget.setEnabled(false);
+
+        new Thread(() -> {
+            String prompt = prepareAutomaticBudgetPrompt();
+            String jsonResponse = callGeminiApi(prompt);
+
+            mainHandler.post(() -> {
+                progressBarAiInsights.setVisibility(View.GONE);
+                btnGenerateAiInsights.setEnabled(true);
+                btnAutoBudget.setEnabled(true);
+                if (jsonResponse != null && !jsonResponse.isEmpty()) {
+                    handleBudgetProposalResponse(jsonResponse);
+                } else {
+                    tvAiInsightsAnalysis.setText("Không thể tạo ngân sách lúc này. Vui lòng thử lại.");
+                }
+            });
+        }).start();
+    }
+
+    private String prepareAutomaticBudgetPrompt() {
+        List<Expense> expenses = activity.getExpenseList();
+        DecimalFormat decimalFormat = activity.getDecimalFormat();
+        String currency = activity.getCurrentCurrency();
+
+        double totalIncome = 0;
+        Map<String, Double> expenseCategoryData = new HashMap<>();
+        for (Expense expense : expenses) {
+            if (expense.getType().equals("income")) {
+                totalIncome += expense.getAmount();
+            } else if (expense.getType().equals("expense")) {
+                String category = expense.getCategory();
+                expenseCategoryData.put(category, expenseCategoryData.getOrDefault(category, 0.0) + expense.getAmount());
+            }
+        }
+
+        StringBuilder promptBuilder = new StringBuilder();
+        promptBuilder.append("Bạn là một chuyên gia tư vấn tài chính. Dựa vào dữ liệu chi tiêu trong tháng qua, hãy đề xuất một kế hoạch ngân sách cho tháng tới. ");
+        promptBuilder.append("Tổng thu nhập của người dùng là: ").append(decimalFormat.format(totalIncome)).append(" ").append(currency).append(". ");
+        promptBuilder.append("Chi tiêu chi tiết theo danh mục: ");
+
+        String expenseDetails = expenseCategoryData.entrySet().stream()
+                .map(entry -> entry.getKey() + ": " + decimalFormat.format(entry.getValue()) + " " + currency)
+                .collect(Collectors.joining("; "));
+        promptBuilder.append(expenseDetails).append(". ");
+
+        promptBuilder.append("Hãy đưa ra một kế hoạch ngân sách hợp lý, đảm bảo tổng ngân sách không vượt quá tổng thu nhập. ");
+        promptBuilder.append("Trả lời bằng tiếng Việt, dưới dạng một chuỗi JSON thuần túy (raw JSON string) chứa một mảng (array) các đối tượng, mỗi đối tượng có hai trường: 'category' (tên danh mục) và 'amount' (số tiền ngân sách). Ví dụ: ");
+        promptBuilder.append("[{\"category\": \"Ăn uống\", \"amount\": 5000000}, {\"category\": \"Đi lại\", \"amount\": 1500000}]");
+
+        return promptBuilder.toString();
+    }
+
+
+    private void handleBudgetProposalResponse(String rawJsonResponse) {
+        try {
+            String jsonToParse = extractJsonFromLlmResponse(rawJsonResponse);
+            if (jsonToParse == null || jsonToParse.isEmpty()) {
+                throw new JSONException("Không tìm thấy JSON hợp lệ trong phản hồi.");
+            }
+
+            final JSONArray budgetArray = new JSONArray(jsonToParse);
+
+            StringBuilder proposalText = new StringBuilder("AI đề xuất kế hoạch ngân sách cho tháng tới:\n\n");
+            for (int i = 0; i < budgetArray.length(); i++) {
+                JSONObject budgetItem = budgetArray.getJSONObject(i);
+                String category = budgetItem.getString("category");
+                double amount = budgetItem.getDouble("amount");
+                proposalText.append("• ").append(category).append(": ").append(activity.getDecimalFormat().format(amount)).append(" ").append(activity.getCurrentCurrency()).append("\n");
+            }
+
+            // Hiển thị kết quả trong một Dialog để người dùng xem
+            new AlertDialog.Builder(requireContext())
+                    .setTitle("Đề xuất Ngân sách Thông minh")
+                    .setMessage(proposalText.toString())
+                    .setPositiveButton("Lưu Ngân sách", (dialog, which) -> {
+                        if (activity != null) {
+                            activity.saveBudgetFromAI(budgetArray);
+                        }
+                    })
+                    .setNegativeButton("Hủy", null)
+                    .show();
+
+        } catch (JSONException e) {
+            Log.e(TAG, "Lỗi phân tích JSON đề xuất ngân sách. Phản hồi thô: " + rawJsonResponse, e);
+            tvAiInsightsAnalysis.setText("Không thể đọc đề xuất ngân sách từ AI. Định dạng có thể không hợp lệ.");
+        }
+    }
+
 
     private String prepareAiPrompt() {
         List<Expense> expenses = activity.getExpenseList();
@@ -240,35 +346,36 @@ public class AiInsightsFragment extends Fragment {
         return insight;
     }
 
-    private void displayInsights(String rawJsonResponse) {
+    private String extractJsonFromLlmResponse(String rawJsonResponse) {
+        if (rawJsonResponse == null || rawJsonResponse.isEmpty()) {
+            return null;
+        }
         try {
-            // Log chuỗi phản hồi thô đầu tiên
-            Log.d(TAG, "Raw JSON response received: " + rawJsonResponse);
-
-            String llmResponseText = "";
-            try {
-                JSONObject outerJson = new JSONObject(rawJsonResponse);
-                if (outerJson.has("candidates")) {
-                    JSONArray candidates = outerJson.getJSONArray("candidates");
-                    if (candidates.length() > 0) {
-                        JSONObject candidate = candidates.getJSONObject(0);
-                        if (candidate.has("content")) {
-                            JSONObject content = candidate.getJSONObject("content");
-                            if (content.has("parts") && content.getJSONArray("parts").length() > 0) {
-                                llmResponseText = content.getJSONArray("parts").getJSONObject(0).getString("text");
-                            }
+            JSONObject outerJson = new JSONObject(rawJsonResponse);
+            if (outerJson.has("candidates")) {
+                JSONArray candidates = outerJson.getJSONArray("candidates");
+                if (candidates.length() > 0) {
+                    JSONObject candidate = candidates.getJSONObject(0);
+                    if (candidate.has("content")) {
+                        JSONObject content = candidate.getJSONObject("content");
+                        if (content.has("parts") && content.getJSONArray("parts").length() > 0) {
+                            String llmResponseText = content.getJSONArray("parts").getJSONObject(0).getString("text");
+                            return extractJsonFromString(llmResponseText);
                         }
                     }
                 }
-            } catch (JSONException e) {
-                Log.w(TAG, "Raw response is not in expected LLM format. Assuming it's directly JSON.", e);
-                llmResponseText = rawJsonResponse; // Fallback if raw response is direct JSON
             }
+        } catch (JSONException e) {
+            Log.w(TAG, "Phản hồi thô có thể không phải là định dạng LLM mong đợi. Thử coi nó là JSON trực tiếp.", e);
+            return extractJsonFromString(rawJsonResponse); // Fallback
+        }
+        return null;
+    }
 
-            Log.d(TAG, "Extracted text part from LLM: " + llmResponseText);
 
-            // Làm sạch chuỗi văn bản để chỉ lấy phần JSON thuần túy
-            String finalJsonToParse = extractJsonFromString(llmResponseText);
+    private void displayInsights(String rawJsonResponse) {
+        try {
+            String finalJsonToParse = extractJsonFromLlmResponse(rawJsonResponse);
 
             Log.d(TAG, "Final JSON string to parse after cleaning: '" + finalJsonToParse + "'");
 
@@ -312,25 +419,15 @@ public class AiInsightsFragment extends Fragment {
         }
     }
 
-    /**
-     * Trích xuất một chuỗi JSON từ một chuỗi lớn hơn có thể chứa văn bản hoặc markdown thừa.
-     * Tìm kiếm sự xuất hiện đầu tiên của '{' và sự xuất hiện cuối cùng của '}' để phân định JSON.
-     *
-     * @param input Chuỗi thô có thể chứa JSON.
-     * @return Chuỗi JSON đã trích xuất, hoặc null nếu không tìm thấy cấu trúc JSON hợp lệ.
-     */
     private String extractJsonFromString(String input) {
         if (input == null || input.isEmpty()) {
             return null;
         }
 
-        // Cắt bỏ khoảng trắng ở đầu và cuối chuỗi trước khi xử lý
         input = input.trim();
         Log.d(TAG, "Input for extractJsonFromString after trim: '" + input + "'");
 
 
-        // Cố gắng tìm một khối JSON được bao quanh bởi markdown ```json ... ```
-        // Sử dụng DOTALL để khớp với các ký tự xuống dòng
         Pattern markdownPattern = Pattern.compile("```(?:json)?\\s*([\\s\\S]*?)\\s*```", Pattern.DOTALL);
         Matcher markdownMatcher = markdownPattern.matcher(input);
         if (markdownMatcher.find()) {
@@ -339,30 +436,27 @@ public class AiInsightsFragment extends Fragment {
             return extracted;
         }
 
-        // Dự phòng: Tìm dấu '{' đầu tiên và dấu '}' cuối cùng
         int firstBrace = input.indexOf('{');
         int lastBrace = input.lastIndexOf('}');
+        int firstBracket = input.indexOf('[');
+        int lastBracket = input.lastIndexOf(']');
 
+        // Check for array response
+        if (firstBracket != -1 && lastBracket != -1 && lastBracket > firstBracket) {
+            return input.substring(firstBracket, lastBracket + 1);
+        }
+        // Check for object response
         if (firstBrace != -1 && lastBrace != -1 && lastBrace > firstBrace) {
-            String extracted = input.substring(firstBrace, lastBrace + 1);
-            Log.d(TAG, "Extracted by brace fallback: '" + extracted + "'");
-            return extracted;
+            return input.substring(firstBrace, lastBrace + 1);
         }
         Log.d(TAG, "No JSON found in extractJsonFromString.");
         return null;
     }
 
-    /**
-     * Removes markdown bold (**) characters from a string.
-     *
-     * @param text The input string potentially containing markdown bold.
-     * @return The string with markdown bold characters removed.
-     */
     private String removeMarkdownBold(String text) {
         if (text == null || text.isEmpty()) {
             return text;
         }
-        // Replace all occurrences of "**" with an empty string
         return text.replace("**", "");
     }
 }

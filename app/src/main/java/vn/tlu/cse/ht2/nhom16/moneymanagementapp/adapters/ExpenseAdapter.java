@@ -1,34 +1,35 @@
-package vn.tlu.cse.ht2.nhom16.moneymanagementapp.adapters; // Đảm bảo tên gói này là đúng và nhất quán
+package vn.tlu.cse.ht2.nhom16.moneymanagementapp.adapters;
 
 import android.content.Context;
-import android.text.format.DateFormat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.core.content.ContextCompat;
-
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.google.android.material.snackbar.Snackbar;
-import vn.tlu.cse.ht2.nhom16.moneymanagementapp.activities.MainActivity; // Import đúng MainActivity từ gói 'activities'
-import vn.tlu.cse.ht2.nhom16.moneymanagementapp.R;
-import vn.tlu.cse.ht2.nhom16.moneymanagementapp.models.Expense;
+import com.google.android.material.textfield.TextInputEditText;
 
 import java.text.DecimalFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Arrays;
+import java.util.Locale;
+
+import vn.tlu.cse.ht2.nhom16.moneymanagementapp.R;
+import vn.tlu.cse.ht2.nhom16.moneymanagementapp.activities.MainActivity;
+import vn.tlu.cse.ht2.nhom16.moneymanagementapp.models.Expense;
 
 public class ExpenseAdapter extends RecyclerView.Adapter<ExpenseAdapter.ExpenseViewHolder> {
 
@@ -36,7 +37,7 @@ public class ExpenseAdapter extends RecyclerView.Adapter<ExpenseAdapter.ExpenseV
     private Context context;
     private DecimalFormat decimalFormat;
     private String currentCurrency;
-
+    private SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault());
 
     public ExpenseAdapter(List<Expense> expenseList, Context context, DecimalFormat decimalFormat, String currentCurrency) {
         this.expenseList = expenseList;
@@ -45,49 +46,17 @@ public class ExpenseAdapter extends RecyclerView.Adapter<ExpenseAdapter.ExpenseV
         this.currentCurrency = currentCurrency;
     }
 
-    public void setDecimalFormat(DecimalFormat newFormat) {
-        this.decimalFormat = newFormat;
-    }
-
-    public void setCurrentCurrency(String newCurrency) {
-        this.currentCurrency = newCurrency;
-    }
-
-
     @NonNull
     @Override
     public ExpenseViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_expense, parent, false);
+        View view = LayoutInflater.from(context).inflate(R.layout.item_expense, parent, false);
         return new ExpenseViewHolder(view);
     }
 
     @Override
     public void onBindViewHolder(@NonNull ExpenseViewHolder holder, int position) {
         Expense expense = expenseList.get(position);
-        holder.tvDescription.setText("Mô tả: " + expense.getDescription());
-
-        holder.tvAmount.setText(String.format("Số tiền: %s %s", decimalFormat.format(expense.getAmount()), currentCurrency));
-
-        if (expense.getType().equals("income")) {
-            holder.tvAmount.setTextColor(ContextCompat.getColor(context, R.color.green_income));
-            holder.tvType.setText("Loại: Thu nhập");
-        } else {
-            holder.tvAmount.setTextColor(ContextCompat.getColor(context, R.color.red_expense));
-            holder.tvType.setText("Loại: Chi tiêu");
-        }
-
-        holder.tvCategory.setText("Danh mục: " + expense.getCategory());
-        if (expense.getTimestamp() != null) {
-            holder.tvTimestamp.setText("Thời gian: " + DateFormat.format("dd-MM-yyyy HH:mm", expense.getTimestamp()));
-        } else {
-            holder.tvTimestamp.setText("Thời gian: N/A");
-        }
-
-        holder.btnEdit.setOnClickListener(v -> showEditDialog(expense));
-        holder.btnDelete.setOnClickListener(v -> {
-            ((MainActivity) context).deleteExpense(expense.getId());
-            Snackbar.make(holder.itemView, "Đã xóa khoản chi/thu", Snackbar.LENGTH_SHORT).show();
-        });
+        holder.bind(expense);
     }
 
     @Override
@@ -95,160 +64,170 @@ public class ExpenseAdapter extends RecyclerView.Adapter<ExpenseAdapter.ExpenseV
         return expenseList.size();
     }
 
-    static class ExpenseViewHolder extends RecyclerView.ViewHolder {
-        TextView tvDescription, tvAmount, tvType, tvCategory, tvTimestamp;
-        Button btnEdit, btnDelete;
+    class ExpenseViewHolder extends RecyclerView.ViewHolder {
+        ImageView ivCategoryIcon;
+        TextView tvExpenseCategory, tvExpenseDescription, tvExpenseAmount, tvExpenseDate;
 
         public ExpenseViewHolder(@NonNull View itemView) {
             super(itemView);
-            tvDescription = itemView.findViewById(R.id.tv_description);
-            tvAmount = itemView.findViewById(R.id.tv_amount);
-            tvType = itemView.findViewById(R.id.tv_type);
-            tvCategory = itemView.findViewById(R.id.tv_category);
-            tvTimestamp = itemView.findViewById(R.id.tv_timestamp);
-            btnEdit = itemView.findViewById(R.id.btn_edit);
-            btnDelete = itemView.findViewById(R.id.btn_delete);
+            ivCategoryIcon = itemView.findViewById(R.id.iv_category_icon);
+            tvExpenseCategory = itemView.findViewById(R.id.tv_expense_category);
+            tvExpenseDescription = itemView.findViewById(R.id.tv_expense_description);
+            tvExpenseAmount = itemView.findViewById(R.id.tv_expense_amount);
+            tvExpenseDate = itemView.findViewById(R.id.tv_expense_date);
+        }
+
+        void bind(final Expense expense) {
+            tvExpenseCategory.setText(expense.getCategory());
+            tvExpenseDescription.setText(expense.getDescription());
+
+            if ("income".equalsIgnoreCase(expense.getType())) {
+                tvExpenseAmount.setText(String.format("+%s %s", decimalFormat.format(expense.getAmount()), currentCurrency));
+                tvExpenseAmount.setTextColor(ContextCompat.getColor(context, R.color.income_color));
+            } else {
+                tvExpenseAmount.setText(String.format("-%s %s", decimalFormat.format(expense.getAmount()), currentCurrency));
+                tvExpenseAmount.setTextColor(ContextCompat.getColor(context, R.color.expense_color));
+            }
+
+            if (expense.getTimestamp() != null) {
+                tvExpenseDate.setText(dateFormat.format(expense.getTimestamp()));
+            }
+
+            // TODO: Set category icon based on category name
+            ivCategoryIcon.setImageResource(R.drawable.ic_category_placeholder);
+
+            itemView.setOnClickListener(v -> showEditDialog(expense));
+
+            itemView.setOnLongClickListener(v -> {
+                new AlertDialog.Builder(context)
+                        .setTitle("Xóa Giao Dịch")
+                        .setMessage("Bạn có chắc muốn xóa giao dịch này?")
+                        .setPositiveButton("Xóa", (dialog, which) -> {
+                            if (context instanceof MainActivity) {
+                                ((MainActivity) context).deleteExpense(expense.getId());
+                            }
+                        })
+                        .setNegativeButton("Hủy", null)
+                        .show();
+                return true;
+            });
         }
     }
 
-    private void showEditDialog(Expense expense) {
+    private void showEditDialog(final Expense expense) {
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
         LayoutInflater inflater = LayoutInflater.from(context);
         View dialogView = inflater.inflate(R.layout.dialog_edit_expense, null);
         builder.setView(dialogView);
 
-        EditText etEditDescription = dialogView.findViewById(R.id.et_edit_description);
-        EditText etEditAmount = dialogView.findViewById(R.id.et_edit_amount);
-        RadioGroup rgEditType = dialogView.findViewById(R.id.rg_edit_type);
-        RadioButton rbEditIncome = dialogView.findViewById(R.id.rb_edit_income);
-        RadioButton rbEditExpense = dialogView.findViewById(R.id.rb_edit_expense);
-        Spinner spinnerEditCategory = dialogView.findViewById(R.id.spinner_edit_category);
-        EditText etEditCustomCategory = dialogView.findViewById(R.id.et_edit_custom_category);
+        final TextInputEditText etDescription = dialogView.findViewById(R.id.et_edit_description);
+        final TextInputEditText etAmount = dialogView.findViewById(R.id.et_edit_amount);
+        final RadioGroup rgType = dialogView.findViewById(R.id.rg_edit_type);
+        final RadioButton rbIncome = dialogView.findViewById(R.id.rb_edit_income);
+        final RadioButton rbExpense = dialogView.findViewById(R.id.rb_edit_expense);
+        final Spinner spinnerCategory = dialogView.findViewById(R.id.spinner_edit_category);
+        final EditText etCustomCategory = dialogView.findViewById(R.id.et_edit_custom_category);
 
-        etEditDescription.setText(expense.getDescription());
-        etEditAmount.setText(String.valueOf(expense.getAmount()));
+        etDescription.setText(expense.getDescription());
+        etAmount.setText(String.valueOf(expense.getAmount()));
 
-        if (expense.getType().equals("income")) {
-            rbEditIncome.setChecked(true);
-        } else {
-            rbEditExpense.setChecked(true);
-        }
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(context, android.R.layout.simple_spinner_item, new ArrayList<>());
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinnerCategory.setAdapter(adapter);
 
-        List<String> expenseCategories = new ArrayList<>(List.of(context.getResources().getStringArray(R.array.expense_categories)));
-        List<String> incomeCategories = new ArrayList<>(List.of(context.getResources().getStringArray(R.array.income_categories)));
-        expenseCategories.add("Thêm danh mục mới...");
+        final List<String> incomeCategories = new ArrayList<>(List.of(context.getResources().getStringArray(R.array.income_categories)));
+        final List<String> expenseCategories = new ArrayList<>(List.of(context.getResources().getStringArray(R.array.expense_categories)));
         incomeCategories.add("Thêm danh mục mới...");
+        expenseCategories.add("Thêm danh mục mới...");
 
-        // Adapter cho spinner danh mục
-        ArrayAdapter<String> categoryAdapter = new ArrayAdapter<>(context, android.R.layout.simple_spinner_item, new ArrayList<>());
-        categoryAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spinnerEditCategory.setAdapter(categoryAdapter);
-
-        // Hàm cập nhật Spinner dựa trên loại giao dịch
-        Runnable updateSpinnerBasedOnType = () -> {
-            List<String> currentCategories;
-            if (rgEditType.getCheckedRadioButtonId() == R.id.rb_edit_income) {
-                currentCategories = incomeCategories;
+        Runnable updateSpinner = () -> {
+            adapter.clear();
+            if (rbIncome.isChecked()) {
+                adapter.addAll(incomeCategories);
             } else {
-                currentCategories = expenseCategories;
+                adapter.addAll(expenseCategories);
             }
-            categoryAdapter.clear();
-            categoryAdapter.addAll(currentCategories);
-            categoryAdapter.notifyDataSetChanged();
+            adapter.notifyDataSetChanged();
 
-            // Đặt selection cho spinner
-            int selectionIndex = currentCategories.indexOf(expense.getCategory());
-            if (selectionIndex != -1) {
-                spinnerEditCategory.setSelection(selectionIndex);
-                etEditCustomCategory.setVisibility(View.GONE);
-                etEditCustomCategory.setText("");
+            List<String> currentList = rbIncome.isChecked() ? incomeCategories : expenseCategories;
+            int selection = currentList.indexOf(expense.getCategory());
+            if (selection != -1) {
+                spinnerCategory.setSelection(selection);
+                etCustomCategory.setVisibility(View.GONE);
             } else {
-                // Nếu danh mục hiện tại không có trong danh sách, chọn "Thêm danh mục mới"
-                spinnerEditCategory.setSelection(currentCategories.indexOf("Thêm danh mục mới..."));
-                etEditCustomCategory.setVisibility(View.VISIBLE);
-                etEditCustomCategory.setText(expense.getCategory());
+                spinnerCategory.setSelection(currentList.size() - 1);
+                etCustomCategory.setText(expense.getCategory());
+                etCustomCategory.setVisibility(View.VISIBLE);
             }
         };
 
-        // Lắng nghe thay đổi của RadioGroup
-        rgEditType.setOnCheckedChangeListener((group, checkedId) -> {
-            updateSpinnerBasedOnType.run();
-        });
+        if ("income".equalsIgnoreCase(expense.getType())) {
+            rbIncome.setChecked(true);
+        } else {
+            rbExpense.setChecked(true);
+        }
 
-        // Lắng nghe sự kiện chọn danh mục từ Spinner
-        spinnerEditCategory.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+        updateSpinner.run();
+
+        rgType.setOnCheckedChangeListener((group, checkedId) -> updateSpinner.run());
+
+        spinnerCategory.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                String selectedCategory = (String) parent.getItemAtPosition(position);
-                if (selectedCategory.equals("Thêm danh mục mới...")) {
-                    etEditCustomCategory.setVisibility(View.VISIBLE);
-                    etEditCustomCategory.requestFocus();
+                if ("Thêm danh mục mới...".equals(parent.getItemAtPosition(position))) {
+                    etCustomCategory.setVisibility(View.VISIBLE);
                 } else {
-                    etEditCustomCategory.setVisibility(View.GONE);
-                    etEditCustomCategory.setText(""); // Clear custom field if not 'Add new'
+                    etCustomCategory.setVisibility(View.GONE);
                 }
             }
-
             @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-                // Do nothing
-            }
+            public void onNothingSelected(AdapterView<?> parent) { }
         });
 
-        // Gọi lần đầu để thiết lập Spinner đúng cách
-        updateSpinnerBasedOnType.run();
+        AlertDialog dialog = builder.setTitle("Sửa Giao Dịch")
+                .setPositiveButton("Lưu", null)
+                .setNegativeButton("Hủy", null)
+                .create();
 
-        builder.setTitle("Sửa Khoản Mục")
-                .setPositiveButton("Lưu", (dialog, which) -> {
-                    String newDescription = etEditDescription.getText().toString().trim();
-                    String newAmountStr = etEditAmount.getText().toString().trim();
+        dialog.setOnShowListener(d -> {
+            dialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener(v -> {
+                String newDesc = etDescription.getText().toString().trim();
+                String newAmountStr = etAmount.getText().toString().trim();
+                if (newDesc.isEmpty() || newAmountStr.isEmpty()) {
+                    Toast.makeText(context, "Vui lòng điền đủ thông tin", Toast.LENGTH_SHORT).show();
+                    return;
+                }
 
-                    int selectedTypeId = rgEditType.getCheckedRadioButtonId();
-                    String newType;
-                    if (selectedTypeId == R.id.rb_edit_income) {
-                        newType = "income";
-                    } else if (selectedTypeId == R.id.rb_edit_expense) {
-                        newType = "expense";
-                    } else {
-                        Snackbar.make(dialogView, "Vui lòng chọn loại giao dịch (Thu/Chi).", Snackbar.LENGTH_SHORT).show();
+                String newType = rbIncome.isChecked() ? "income" : "expense";
+                String newCategory;
+                if ("Thêm danh mục mới...".equals(spinnerCategory.getSelectedItem().toString())) {
+                    newCategory = etCustomCategory.getText().toString().trim();
+                    if (newCategory.isEmpty()) {
+                        Toast.makeText(context, "Vui lòng nhập tên danh mục mới", Toast.LENGTH_SHORT).show();
                         return;
                     }
+                } else {
+                    newCategory = spinnerCategory.getSelectedItem().toString();
+                }
 
-                    String newCategory;
-                    if (etEditCustomCategory.getVisibility() == View.VISIBLE && !etEditCustomCategory.getText().toString().trim().isEmpty()) {
-                        newCategory = etEditCustomCategory.getText().toString().trim();
-                    } else if (spinnerEditCategory.getSelectedItem() != null && !spinnerEditCategory.getSelectedItem().toString().equals("Thêm danh mục mới...")) {
-                        newCategory = spinnerEditCategory.getSelectedItem().toString();
-                    } else {
-                        Snackbar.make(dialogView, "Vui lòng chọn hoặc nhập danh mục.", Snackbar.LENGTH_SHORT).show();
-                        return;
-                    }
-
-                    if (newDescription.isEmpty() || newAmountStr.isEmpty() || newCategory.isEmpty()) {
-                        Snackbar.make(dialogView, "Vui lòng điền đầy đủ thông tin.", Snackbar.LENGTH_SHORT).show();
-                        return;
-                    }
-
-                    double newAmount;
-                    try {
-                        newAmount = Double.parseDouble(newAmountStr);
-                    } catch (NumberFormatException e) {
-                        Snackbar.make(dialogView, "Số tiền không hợp lệ.", Snackbar.LENGTH_SHORT).show();
-                        return;
-                    }
-
-
-                    expense.setDescription(newDescription);
+                try {
+                    double newAmount = Double.parseDouble(newAmountStr);
+                    expense.setDescription(newDesc);
                     expense.setAmount(newAmount);
-                    expense.setType(newType.toLowerCase());
+                    expense.setType(newType);
                     expense.setCategory(newCategory);
 
-                    ((MainActivity) context).updateExpense(expense);
-                    Snackbar.make(dialogView, "Đã cập nhật khoản chi/thu", Snackbar.LENGTH_SHORT).show();
-                })
-                .setNegativeButton("Hủy", (dialog, which) -> dialog.dismiss());
+                    if (context instanceof MainActivity) {
+                        ((MainActivity) context).updateExpense(expense);
+                    }
+                    dialog.dismiss();
 
-        AlertDialog dialog = builder.create();
+                } catch (NumberFormatException e) {
+                    Toast.makeText(context, "Số tiền không hợp lệ", Toast.LENGTH_SHORT).show();
+                }
+            });
+        });
+
         dialog.show();
     }
 }

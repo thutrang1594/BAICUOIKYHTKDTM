@@ -1,5 +1,6 @@
 package vn.tlu.cse.ht2.nhom16.moneymanagementapp.fragments;
 
+import android.app.Dialog;
 import android.content.Context;
 import android.os.Bundle;
 import android.util.Log;
@@ -10,53 +11,44 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.RadioButton;
 import android.widget.RadioGroup;
-import android.widget.Spinner; // Import Spinner
+import android.widget.Spinner;
 import android.widget.TextView;
-import android.widget.Toast; // Vẫn dùng Toast cho các thông báo ngắn gọn
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.android.material.snackbar.Snackbar;
-import vn.tlu.cse.ht2.nhom16.moneymanagementapp.activities.MainActivity;
-import vn.tlu.cse.ht2.nhom16.moneymanagementapp.R;
-import vn.tlu.cse.ht2.nhom16.moneymanagementapp.adapters.CategorySummaryAdapter;
-import vn.tlu.cse.ht2.nhom16.moneymanagementapp.models.CategorySummary;
-import vn.tlu.cse.ht2.nhom16.moneymanagementapp.models.Expense;
+import com.google.android.material.textfield.TextInputEditText;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Comparator;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.HashMap;
+
+import vn.tlu.cse.ht2.nhom16.moneymanagementapp.R;
+import vn.tlu.cse.ht2.nhom16.moneymanagementapp.activities.MainActivity;
+import vn.tlu.cse.ht2.nhom16.moneymanagementapp.adapters.ExpenseAdapter;
+import vn.tlu.cse.ht2.nhom16.moneymanagementapp.models.Expense;
 
 public class HomeFragment extends Fragment {
 
     private static final String TAG = "HomeFragment";
-    private EditText etDescription, etAmount, etCustomCategory; // etCategory đã được thay bằng spinner
-    private RadioGroup rgType;
-    private RadioButton rbIncome, rbExpense;
-    private Spinner spinnerCategory; // Spinner cho danh mục
-    private Button btnAddExpense;
-    private TextView tvAccountBalance, tvIncomeTotal, tvExpenseTotal;
-    private RecyclerView rvTopExpenses;
-    private CategorySummaryAdapter categorySummaryAdapter;
-    private List<CategorySummary> topExpensesList;
-    private FloatingActionButton fabAddTransaction;
+
+    private TextView tvTotalBalance, tvTotalIncome, tvTotalExpense;
+    private RecyclerView rvRecentExpenses;
+    private FloatingActionButton fabAddExpense;
+    private ExpenseAdapter recentExpensesAdapter;
+    private List<Expense> recentExpenseList = new ArrayList<>();
 
     private MainActivity activity;
-    private ArrayAdapter<String> categoryAdapter;
-    private List<String> expenseCategories;
-    private List<String> incomeCategories;
-
 
     @Override
     public void onAttach(@NonNull Context context) {
@@ -71,203 +63,105 @@ public class HomeFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        Log.d(TAG, "onCreateView: HomeFragment created.");
         View view = inflater.inflate(R.layout.fragment_home, container, false);
 
-        // Ánh xạ các View
-        etDescription = view.findViewById(R.id.et_description);
-        etAmount = view.findViewById(R.id.et_amount);
-        rgType = view.findViewById(R.id.rg_type);
-        rbIncome = view.findViewById(R.id.rb_income);
-        rbExpense = view.findViewById(R.id.rb_expense);
-        spinnerCategory = view.findViewById(R.id.spinner_category); // Ánh xạ Spinner
-        etCustomCategory = view.findViewById(R.id.et_custom_category); // Ánh xạ EditText cho danh mục tùy chỉnh
-        btnAddExpense = view.findViewById(R.id.btn_add_expense);
-        tvAccountBalance = view.findViewById(R.id.tv_account_balance);
-        tvIncomeTotal = view.findViewById(R.id.tv_income_total);
-        tvExpenseTotal = view.findViewById(R.id.tv_expense_total);
-        rvTopExpenses = view.findViewById(R.id.rv_top_expenses);
-        fabAddTransaction = view.findViewById(R.id.fab_add_transaction);
+        tvTotalBalance = view.findViewById(R.id.tv_total_balance);
+        tvTotalIncome = view.findViewById(R.id.tv_total_income);
+        tvTotalExpense = view.findViewById(R.id.tv_total_expense);
+        rvRecentExpenses = view.findViewById(R.id.rv_recent_expenses);
+        fabAddExpense = view.findViewById(R.id.fab_add_expense);
 
-        topExpensesList = new ArrayList<>();
-        categorySummaryAdapter = new CategorySummaryAdapter(topExpensesList, activity.getDecimalFormat(), activity.getCurrentCurrency());
-        rvTopExpenses.setLayoutManager(new LinearLayoutManager(getContext()));
-        rvTopExpenses.setAdapter(categorySummaryAdapter);
+        setupRecyclerView();
 
-        // Khởi tạo danh sách danh mục từ strings.xml
-        expenseCategories = new ArrayList<>(List.of(getResources().getStringArray(R.array.expense_categories)));
-        incomeCategories = new ArrayList<>(List.of(getResources().getStringArray(R.array.income_categories)));
-        // Thêm tùy chọn "Thêm danh mục mới"
-        expenseCategories.add("Thêm danh mục mới...");
-        incomeCategories.add("Thêm danh mục mới...");
+        fabAddExpense.setOnClickListener(v -> showAddTransactionDialog());
 
-        // Thiết lập Adapter cho Spinner dựa trên lựa chọn loại giao dịch ban đầu
-        updateCategorySpinner(rbIncome.isChecked() ? incomeCategories : expenseCategories);
-
-
-        // Lắng nghe thay đổi của RadioGroup
-        rgType.setOnCheckedChangeListener((group, checkedId) -> {
-            if (checkedId == R.id.rb_income) {
-                updateCategorySpinner(incomeCategories);
-            } else {
-                updateCategorySpinner(expenseCategories);
-            }
-        });
-
-        // Lắng nghe sự kiện chọn danh mục từ Spinner
-        spinnerCategory.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                String selectedCategory = (String) parent.getItemAtPosition(position);
-                if (selectedCategory.equals("Thêm danh mục mới...")) {
-                    etCustomCategory.setVisibility(View.VISIBLE);
-                    etCustomCategory.requestFocus();
-                } else {
-                    etCustomCategory.setVisibility(View.GONE);
-                    etCustomCategory.setText(""); // Clear custom field if not 'Add new'
-                }
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-                // Do nothing
-            }
-        });
-
-
-        // Lắng nghe sự kiện thêm khoản chi/thu
-        btnAddExpense.setOnClickListener(v -> addOrUpdateExpense());
-        fabAddTransaction.setOnClickListener(v -> {
-            clearInputFields();
-            Snackbar.make(view, "Nhập thông tin giao dịch mới", Snackbar.LENGTH_SHORT).show();
-        });
+        updateUI();
 
         return view;
     }
 
-    private void updateCategorySpinner(List<String> categories) {
-        categoryAdapter = new ArrayAdapter<>(requireContext(), android.R.layout.simple_spinner_item, categories);
-        categoryAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spinnerCategory.setAdapter(categoryAdapter);
-        // Đặt mặc định chọn mục đầu tiên (hoặc "Khác")
-        spinnerCategory.setSelection(categories.indexOf("Khác") != -1 ? categories.indexOf("Khác") : 0);
-        etCustomCategory.setVisibility(View.GONE); // Ẩn trường tùy chỉnh khi chuyển loại
-        etCustomCategory.setText("");
+    private void setupRecyclerView() {
+        recentExpensesAdapter = new ExpenseAdapter(recentExpenseList, getContext(), activity.getDecimalFormat(), activity.getCurrentCurrency());
+        rvRecentExpenses.setLayoutManager(new LinearLayoutManager(getContext()));
+        rvRecentExpenses.setAdapter(recentExpensesAdapter);
     }
 
-    // Phương thức để thêm hoặc cập nhật một khoản chi/thu
-    private void addOrUpdateExpense() {
-        String description = etDescription.getText().toString().trim();
-        String amountStr = etAmount.getText().toString().trim();
-
-        // Lấy loại giao dịch từ RadioGroup
-        int selectedTypeId = rgType.getCheckedRadioButtonId();
-        String type;
-        if (selectedTypeId == R.id.rb_income) {
-            type = "income";
-        } else if (selectedTypeId == R.id.rb_expense) {
-            type = "expense";
-        } else {
-            Snackbar.make(requireView(), "Vui lòng chọn loại giao dịch (Thu/Chi)", Snackbar.LENGTH_SHORT).show();
-            return;
-        }
-
-        // Lấy danh mục từ Spinner hoặc EditText tùy chỉnh
-        String category;
-        if (etCustomCategory.getVisibility() == View.VISIBLE && !etCustomCategory.getText().toString().trim().isEmpty()) {
-            category = etCustomCategory.getText().toString().trim();
-        } else if (spinnerCategory.getSelectedItem() != null && !spinnerCategory.getSelectedItem().toString().equals("Thêm danh mục mới...")) {
-            category = spinnerCategory.getSelectedItem().toString();
-        } else {
-            Snackbar.make(requireView(), "Vui lòng chọn hoặc nhập danh mục", Snackbar.LENGTH_SHORT).show();
-            return;
-        }
-
-        if (description.isEmpty() || amountStr.isEmpty() || category.isEmpty()) {
-            Snackbar.make(requireView(), "Vui lòng điền đầy đủ thông tin", Snackbar.LENGTH_SHORT).show();
-            return;
-        }
-
-        double amount;
-        try {
-            amount = Double.parseDouble(amountStr);
-        } catch (NumberFormatException e) {
-            Snackbar.make(requireView(), "Số tiền không hợp lệ.", Snackbar.LENGTH_SHORT).show();
-            return;
-        }
-
-
-        Expense newExpense = new Expense(description, amount, type.toLowerCase(), category);
-        activity.addExpense(newExpense); // Gọi hàm thêm trong MainActivity
-
-        clearInputFields();
-    }
-
-    // Xóa nội dung trong các trường nhập liệu
-    private void clearInputFields() {
-        etDescription.setText("");
-        etAmount.setText("");
-        rgType.check(R.id.rb_income); // Đặt mặc định là Thu nhập
-        spinnerCategory.setSelection(0); // Đặt lại Spinner về mục đầu tiên
-        etCustomCategory.setText("");
-        etCustomCategory.setVisibility(View.GONE);
-    }
-
-    // Cập nhật giao diện người dùng dựa trên dữ liệu mới
     public void updateUI() {
-        Log.d(TAG, "updateUI: Called for HomeFragment.");
-        if (activity == null || !isAdded()) {
-            Log.w(TAG, "updateUI: HomeFragment not attached or not added. Skipping UI update.");
-            return;
-        }
+        if (activity == null || !isAdded()) return;
 
-        List<Expense> currentExpenses = activity.getExpenseList();
-        Log.d(TAG, "updateUI: currentExpenses size from MainActivity: " + (currentExpenses != null ? currentExpenses.size() : "null"));
-
+        List<Expense> allExpenses = activity.getExpenseList();
         DecimalFormat decimalFormat = activity.getDecimalFormat();
-        String currentCurrency = activity.getCurrentCurrency();
+        String currency = activity.getCurrentCurrency();
 
         double totalIncome = 0;
         double totalExpense = 0;
-        Map<String, Double> expenseCategoryData = new HashMap<>();
 
-        if (currentExpenses != null) {
-            for (Expense expense : currentExpenses) {
-                if (expense.getType().equals("income")) {
-                    totalIncome += expense.getAmount();
-                } else if (expense.getType().equals("expense")) {
-                    totalExpense += expense.getAmount();
-                    String category = expense.getCategory();
-                    expenseCategoryData.put(category, expenseCategoryData.getOrDefault(category, 0.0) + expense.getAmount());
-                }
+        for (Expense expense : allExpenses) {
+            if (expense.getType().equalsIgnoreCase("income")) {
+                totalIncome += expense.getAmount();
+            } else {
+                totalExpense += expense.getAmount();
             }
-        } else {
-            Log.w(TAG, "updateUI: currentExpenses list is null in HomeFragment.");
         }
 
-
         double balance = totalIncome - totalExpense;
-        tvAccountBalance.setText(String.format("%s %s", decimalFormat.format(balance), currentCurrency));
-        tvIncomeTotal.setText(String.format("Tổng thu: %s %s", decimalFormat.format(totalIncome), currentCurrency));
-        tvExpenseTotal.setText(String.format("Tổng chi: %s %s", decimalFormat.format(totalExpense), currentCurrency));
-        Log.d(TAG, "updateUI: HomeFragment totals - Income: " + totalIncome + ", Expense: " + totalExpense + ", Balance: " + balance);
 
+        tvTotalBalance.setText(String.format("%s %s", decimalFormat.format(balance), currency));
+        tvTotalIncome.setText(decimalFormat.format(totalIncome));
+        tvTotalExpense.setText(decimalFormat.format(totalExpense));
 
-        // Cập nhật Top Expenses
-        topExpensesList.clear();
-        double finalTotalExpense = totalExpense; // Tạo biến final để dùng trong lambda
-        expenseCategoryData.forEach((category, amount) -> {
-            double percentage = (finalTotalExpense > 0) ? (amount / finalTotalExpense) * 100 : 0;
-            topExpensesList.add(new CategorySummary(category, percentage, amount));
+        // Update recent transactions list (e.g., show latest 5)
+        recentExpenseList.clear();
+        int limit = Math.min(allExpenses.size(), 5);
+        for (int i = 0; i < limit; i++) {
+            recentExpenseList.add(allExpenses.get(i));
+        }
+        recentExpensesAdapter.notifyDataSetChanged();
+    }
+
+    private void showAddTransactionDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(requireContext());
+        LayoutInflater inflater = requireActivity().getLayoutInflater();
+        View dialogView = inflater.inflate(R.layout.dialog_add_transaction, null);
+        builder.setView(dialogView);
+
+        final TextInputEditText etDescription = dialogView.findViewById(R.id.et_dialog_description);
+        final TextInputEditText etAmount = dialogView.findViewById(R.id.et_dialog_amount);
+        final RadioGroup rgType = dialogView.findViewById(R.id.rg_dialog_type);
+        final Spinner spinnerCategory = dialogView.findViewById(R.id.spinner_dialog_category);
+        final Button btnSave = dialogView.findViewById(R.id.btn_dialog_save);
+
+        // Setup Spinner
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(getContext(),
+                R.array.expense_categories, android.R.layout.simple_spinner_item);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinnerCategory.setAdapter(adapter);
+
+        final AlertDialog dialog = builder.create();
+
+        btnSave.setOnClickListener(v -> {
+            String description = etDescription.getText().toString().trim();
+            String amountStr = etAmount.getText().toString().trim();
+            String category = spinnerCategory.getSelectedItem().toString();
+
+            int selectedTypeId = rgType.getCheckedRadioButtonId();
+            String type = (selectedTypeId == R.id.rb_dialog_income) ? "income" : "expense";
+
+            if (description.isEmpty() || amountStr.isEmpty()) {
+                Toast.makeText(getContext(), "Vui lòng điền đầy đủ thông tin", Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+            try {
+                double amount = Double.parseDouble(amountStr);
+                Expense newExpense = new Expense(description, amount, type, category);
+                activity.addExpense(newExpense);
+                dialog.dismiss();
+            } catch (NumberFormatException e) {
+                Toast.makeText(getContext(), "Số tiền không hợp lệ", Toast.LENGTH_SHORT).show();
+            }
         });
-        Log.d(TAG, "updateUI: HomeFragment topExpensesList size: " + topExpensesList.size());
 
-
-        // Sắp xếp theo số tiền giảm dần
-        Collections.sort(topExpensesList, (o1, o2) -> Double.compare(o2.getAmount(), o1.getAmount()));
-
-        categorySummaryAdapter.setDecimalFormat(decimalFormat); // Cập nhật định dạng tiền tệ cho adapter
-        categorySummaryAdapter.setCurrentCurrency(currentCurrency); // Cập nhật đơn vị tiền tệ cho adapter
-        categorySummaryAdapter.notifyDataSetChanged();
+        dialog.show();
     }
 }

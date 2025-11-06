@@ -26,7 +26,7 @@ public class HistoryFragment extends Fragment {
 
     private RecyclerView rvExpensesHistory;
     private ExpenseAdapter expenseAdapter;
-    private List<Expense> expenseList; // Danh sách này sẽ được cập nhật từ MainActivity
+    private List<Expense> expenseList;
 
     private ProgressBar pbLoadingHistory;
     private TextView tvEmptyHistoryState;
@@ -54,7 +54,7 @@ public class HistoryFragment extends Fragment {
 
         expenseList = new ArrayList<>(); // Khởi tạo danh sách trống
 
-        // Truyền context của activity (MainActivity) và đơn vị tiền tệ cho adapter
+        // Truyền context của activity (MainActivity) và các thông tin cần thiết cho adapter
         expenseAdapter = new ExpenseAdapter(expenseList, activity, activity.getDecimalFormat(), activity.getCurrentCurrency());
         rvExpensesHistory.setLayoutManager(new LinearLayoutManager(getContext()));
         rvExpensesHistory.setAdapter(expenseAdapter);
@@ -73,8 +73,7 @@ public class HistoryFragment extends Fragment {
         expenseList.clear();
         expenseList.addAll(activity.getExpenseList());
 
-        expenseAdapter.setDecimalFormat(activity.getDecimalFormat());
-        expenseAdapter.setCurrentCurrency(activity.getCurrentCurrency());
+        // Các dòng code bị lỗi đã được xóa bỏ. Chỉ cần thông báo cho adapter là đủ.
         expenseAdapter.notifyDataSetChanged();
 
         // Hiển thị trạng thái rỗng nếu danh sách trống, nếu không thì hiển thị RecyclerView

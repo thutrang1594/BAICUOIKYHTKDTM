@@ -42,6 +42,6 @@
         android:text="VND -3.000.000"
         android:textSize="16sp"
         android:textStyle="bold"
-        android:textColor="@color/red_expense"/> <!-- Sẽ thêm màu red_expense vào colors.xml -->
+        android:textColor="@color/expense_color"/>
 
 </LinearLayout>

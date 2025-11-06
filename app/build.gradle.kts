@@ -63,4 +63,5 @@ dependencies {
     implementation ("com.google.firebase:firebase-auth:23.2.1")
     implementation ("com.google.android.gms:play-services-auth:21.3.0")
     implementation("com.github.PhilJay:MPAndroidChart:v3.1.0")
+    implementation("androidx.work:work-runtime-ktx:2.9.0") // Sửa lỗi ở đây
 }

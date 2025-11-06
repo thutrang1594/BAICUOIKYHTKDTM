@@ -190,8 +190,6 @@ public class BudgetFragment extends Fragment {
         }
 
         budgetAdapter.setCurrentMonthExpensesByCategory(currentMonthExpensesByCategory); // Cập nhật chi tiêu cho adapter
-        budgetAdapter.setDecimalFormat(activity.getDecimalFormat());
-        budgetAdapter.setCurrentCurrency(activity.getCurrentCurrency());
         budgetAdapter.notifyDataSetChanged();
 
         // Xử lý trạng thái rỗng

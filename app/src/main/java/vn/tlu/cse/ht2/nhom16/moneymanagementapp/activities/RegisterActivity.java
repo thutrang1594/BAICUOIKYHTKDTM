@@ -1,15 +1,14 @@
 package vn.tlu.cse.ht2.nhom16.moneymanagementapp.activities;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.google.android.material.textfield.TextInputEditText;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
@@ -20,30 +19,27 @@ public class RegisterActivity extends AppCompatActivity {
     private static final String TAG = "RegisterActivity";
     private FirebaseAuth mAuth;
 
-    private EditText etEmail, etPassword, etConfirmPassword;
+    private TextInputEditText etEmail, etPassword, etConfirmPassword;
     private Button btnRegister;
     private TextView tvLoginLink;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_register); // Liên kết với file layout
+        setContentView(R.layout.activity_register);
 
         mAuth = FirebaseAuth.getInstance();
 
-        // Ánh xạ các View
         etEmail = findViewById(R.id.et_register_email);
         etPassword = findViewById(R.id.et_register_password);
         etConfirmPassword = findViewById(R.id.et_confirm_password);
         btnRegister = findViewById(R.id.btn_register);
         tvLoginLink = findViewById(R.id.tv_login_link);
 
-        // Lắng nghe sự kiện nút đăng ký
         btnRegister.setOnClickListener(v -> registerUser());
 
-        // Lắng nghe sự kiện cho link đăng nhập
         tvLoginLink.setOnClickListener(v -> {
-            finish(); // Đóng RegisterActivity và quay lại LoginActivity
+            finish(); // Close RegisterActivity and go back to LoginActivity
         });
     }
 
@@ -74,7 +70,7 @@ public class RegisterActivity extends AppCompatActivity {
                         FirebaseUser user = mAuth.getCurrentUser();
                         Toast.makeText(RegisterActivity.this, "Đăng ký thành công. Vui lòng đăng nhập.",
                                 Toast.LENGTH_SHORT).show();
-                        finish(); // Trở lại LoginActivity sau khi đăng ký thành công
+                        finish(); // Go back to LoginActivity after successful registration
                     } else {
                         Log.w(TAG, "createUserWithEmail:failure", task.getException());
                         Toast.makeText(RegisterActivity.this, "Đăng ký thất bại: " + task.getException().getMessage(),

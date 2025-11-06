@@ -1,34 +1,33 @@
 package vn.tlu.cse.ht2.nhom16.moneymanagementapp.adapters;
 
 import android.content.Context;
-import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.material.progressindicator.LinearProgressIndicator;
 import com.google.android.material.snackbar.Snackbar;
-import vn.tlu.cse.ht2.nhom16.moneymanagementapp.activities.MainActivity;
-import vn.tlu.cse.ht2.nhom16.moneymanagementapp.R;
-import vn.tlu.cse.ht2.nhom16.moneymanagementapp.models.Budget;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import vn.tlu.cse.ht2.nhom16.moneymanagementapp.R;
+import vn.tlu.cse.ht2.nhom16.moneymanagementapp.activities.MainActivity;
+import vn.tlu.cse.ht2.nhom16.moneymanagementapp.models.Budget;
 
 public class BudgetAdapter extends RecyclerView.Adapter<BudgetAdapter.BudgetViewHolder> {
 
@@ -46,16 +45,8 @@ public class BudgetAdapter extends RecyclerView.Adapter<BudgetAdapter.BudgetView
         this.currentMonthExpensesByCategory = new HashMap<>();
     }
 
-    public void setDecimalFormat(DecimalFormat newFormat) {
-        this.decimalFormat = newFormat;
-    }
-
-    public void setCurrentCurrency(String newCurrency) {
-        this.currentCurrency = newCurrency;
-    }
-
     public void setCurrentMonthExpensesByCategory(Map<String, Double> expenses) {
-        this.currentMonthExpensesByCategory = expenses;
+        this.currentMonthExpensesByCategory = (expenses != null) ? expenses : new HashMap<>();
         notifyDataSetChanged();
     }
 
@@ -69,34 +60,7 @@ public class BudgetAdapter extends RecyclerView.Adapter<BudgetAdapter.BudgetView
     @Override
     public void onBindViewHolder(@NonNull BudgetViewHolder holder, int position) {
         Budget budget = budgetList.get(position);
-        holder.tvBudgetCategoryName.setText(budget.getCategory());
-        holder.tvBudgetAmount.setText(String.format("%s %s", decimalFormat.format(budget.getAmount()), currentCurrency));
-
-        double spentAmount = currentMonthExpensesByCategory.getOrDefault(budget.getCategory(), 0.0);
-        holder.tvBudgetSpent.setText(String.format("%s %s", decimalFormat.format(spentAmount), currentCurrency));
-
-        int progress = 0;
-        if (budget.getAmount() > 0) {
-            progress = (int) ((spentAmount / budget.getAmount()) * 100);
-            if (progress > 100) progress = 100;
-        }
-        holder.pbBudgetProgress.setProgress(progress);
-
-        if (spentAmount > budget.getAmount()) {
-            holder.tvBudgetRemaining.setTextColor(context.getResources().getColor(R.color.red_expense));
-            holder.tvBudgetRemaining.setText("Vượt ngân sách: " + decimalFormat.format(spentAmount - budget.getAmount()) + " " + currentCurrency);
-            holder.pbBudgetProgress.setProgressTintList(context.getResources().getColorStateList(R.color.red_expense));
-        } else {
-            holder.tvBudgetRemaining.setTextColor(context.getResources().getColor(android.R.color.tab_indicator_text));
-            holder.tvBudgetRemaining.setText("Còn lại: " + decimalFormat.format(budget.getAmount() - spentAmount) + " " + currentCurrency);
-            holder.pbBudgetProgress.setProgressTintList(context.getResources().getColorStateList(R.color.green_income));
-        }
-
-        holder.btnEditBudget.setOnClickListener(v -> showEditDialog(budget));
-        holder.btnDeleteBudget.setOnClickListener(v -> {
-            ((MainActivity) context).deleteBudget(budget.getId());
-            Snackbar.make(holder.itemView, "Đã xóa ngân sách", Snackbar.LENGTH_SHORT).show();
-        });
+        holder.bind(budget);
     }
 
     @Override
@@ -104,20 +68,57 @@ public class BudgetAdapter extends RecyclerView.Adapter<BudgetAdapter.BudgetView
         return budgetList.size();
     }
 
-    static class BudgetViewHolder extends RecyclerView.ViewHolder {
-        TextView tvBudgetCategoryName, tvBudgetAmount, tvBudgetSpent, tvBudgetRemaining;
-        ProgressBar pbBudgetProgress;
-        Button btnEditBudget, btnDeleteBudget;
+    class BudgetViewHolder extends RecyclerView.ViewHolder {
+        TextView tvBudgetCategory, tvBudgetLimit, tvBudgetSpent;
+        LinearProgressIndicator progressBudget;
 
         public BudgetViewHolder(@NonNull View itemView) {
             super(itemView);
-            tvBudgetCategoryName = itemView.findViewById(R.id.tv_budget_category_name);
-            tvBudgetAmount = itemView.findViewById(R.id.tv_budget_amount);
+            tvBudgetCategory = itemView.findViewById(R.id.tv_budget_category);
+            tvBudgetLimit = itemView.findViewById(R.id.tv_budget_limit);
             tvBudgetSpent = itemView.findViewById(R.id.tv_budget_spent);
-            tvBudgetRemaining = itemView.findViewById(R.id.tv_budget_remaining);
-            pbBudgetProgress = itemView.findViewById(R.id.pb_budget_progress);
-            btnEditBudget = itemView.findViewById(R.id.btn_edit_budget);
-            btnDeleteBudget = itemView.findViewById(R.id.btn_delete_budget);
+            progressBudget = itemView.findViewById(R.id.progress_budget);
+        }
+
+        void bind(final Budget budget) {
+            tvBudgetCategory.setText(budget.getCategory());
+
+            double spentAmount = currentMonthExpensesByCategory.getOrDefault(budget.getCategory(), 0.0);
+
+            tvBudgetSpent.setText("Đã chi: " + decimalFormat.format(spentAmount));
+            tvBudgetLimit.setText(String.format("/ %s %s", decimalFormat.format(budget.getAmount()), currentCurrency));
+
+            int progress = 0;
+            if (budget.getAmount() > 0) {
+                progress = (int) ((spentAmount / budget.getAmount()) * 100);
+            }
+
+            progressBudget.setProgress(Math.min(progress, 100));
+
+            if (spentAmount > budget.getAmount()) {
+                progressBudget.setIndicatorColor(ContextCompat.getColor(context, R.color.expense_color));
+                tvBudgetSpent.setTextColor(ContextCompat.getColor(context, R.color.expense_color));
+            } else {
+                progressBudget.setIndicatorColor(ContextCompat.getColor(context, R.color.md_theme_primary));
+                tvBudgetSpent.setTextColor(ContextCompat.getColor(context, R.color.md_theme_onSurfaceVariant));
+            }
+
+            itemView.setOnClickListener(v -> showEditDialog(budget));
+
+            itemView.setOnLongClickListener(v -> {
+                new AlertDialog.Builder(context)
+                        .setTitle("Xóa Ngân sách")
+                        .setMessage("Bạn có muốn xóa ngân sách cho '" + budget.getCategory() + "'?")
+                        .setPositiveButton("Xóa", (dialog, which) -> {
+                            if (context instanceof MainActivity) {
+                                ((MainActivity) context).deleteBudget(budget.getId());
+                                Snackbar.make(itemView, "Đã xóa ngân sách", Snackbar.LENGTH_SHORT).show();
+                            }
+                        })
+                        .setNegativeButton("Hủy", null)
+                        .show();
+                return true;
+            });
         }
     }
 
@@ -131,7 +132,6 @@ public class BudgetAdapter extends RecyclerView.Adapter<BudgetAdapter.BudgetView
         EditText etEditBudgetCustomCategory = dialogView.findViewById(R.id.et_edit_budget_custom_category);
         EditText etEditAmount = dialogView.findViewById(R.id.et_edit_budget_amount);
 
-        // Populate spinner with expense categories (since budget is for expense)
         List<String> expenseCategories = new ArrayList<>(List.of(context.getResources().getStringArray(R.array.expense_categories)));
         expenseCategories.add("Thêm danh mục mới...");
 
@@ -139,14 +139,12 @@ public class BudgetAdapter extends RecyclerView.Adapter<BudgetAdapter.BudgetView
         categoryAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinnerEditBudgetCategory.setAdapter(categoryAdapter);
 
-        // Set initial selection
         int selectionIndex = expenseCategories.indexOf(budget.getCategory());
         if (selectionIndex != -1) {
             spinnerEditBudgetCategory.setSelection(selectionIndex);
             etEditBudgetCustomCategory.setVisibility(View.GONE);
-            etEditBudgetCustomCategory.setText("");
         } else {
-            spinnerEditBudgetCategory.setSelection(expenseCategories.indexOf("Thêm danh mục mới..."));
+            spinnerEditBudgetCategory.setSelection(expenseCategories.size() - 1);
             etEditBudgetCustomCategory.setVisibility(View.VISIBLE);
             etEditBudgetCustomCategory.setText(budget.getCategory());
         }
@@ -154,65 +152,52 @@ public class BudgetAdapter extends RecyclerView.Adapter<BudgetAdapter.BudgetView
         spinnerEditBudgetCategory.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                String selectedCategory = (String) parent.getItemAtPosition(position);
-                if (selectedCategory.equals("Thêm danh mục mới...")) {
+                if ("Thêm danh mục mới...".equals(parent.getItemAtPosition(position).toString())) {
                     etEditBudgetCustomCategory.setVisibility(View.VISIBLE);
-                    etEditBudgetCustomCategory.requestFocus();
                 } else {
                     etEditBudgetCustomCategory.setVisibility(View.GONE);
-                    etEditBudgetCustomCategory.setText("");
                 }
             }
-
             @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-                // Do nothing
-            }
+            public void onNothingSelected(AdapterView<?> parent) {}
         });
-
 
         etEditAmount.setText(String.valueOf(budget.getAmount()));
 
         builder.setTitle("Sửa Ngân sách")
                 .setPositiveButton("Lưu", (dialog, which) -> {
                     String newCategory;
-                    if (etEditBudgetCustomCategory.getVisibility() == View.VISIBLE && !etEditBudgetCustomCategory.getText().toString().trim().isEmpty()) {
+                    boolean isCustomCategory = "Thêm danh mục mới...".equals(spinnerEditBudgetCategory.getSelectedItem().toString());
+                    if (isCustomCategory) {
                         newCategory = etEditBudgetCustomCategory.getText().toString().trim();
-                    } else if (spinnerEditBudgetCategory.getSelectedItem() != null && !spinnerEditBudgetCategory.getSelectedItem().toString().equals("Thêm danh mục mới...")) {
-                        newCategory = spinnerEditBudgetCategory.getSelectedItem().toString();
                     } else {
-                        Snackbar.make(dialogView, "Vui lòng chọn hoặc nhập danh mục.", Snackbar.LENGTH_SHORT).show();
+                        newCategory = spinnerEditBudgetCategory.getSelectedItem().toString();
+                    }
+
+                    if (newCategory.isEmpty()) {
+                        Toast.makeText(context, "Danh mục không được để trống.", Toast.LENGTH_SHORT).show();
                         return;
                     }
 
                     String newAmountStr = etEditAmount.getText().toString().trim();
-
-                    if (newCategory.isEmpty() || newAmountStr.isEmpty()) {
-                        Snackbar.make(dialogView, "Vui lòng điền đầy đủ thông tin.", Snackbar.LENGTH_SHORT).show();
+                    if (newAmountStr.isEmpty()) {
+                        Toast.makeText(context, "Số tiền không được để trống.", Toast.LENGTH_SHORT).show();
                         return;
                     }
 
-                    double newAmount;
                     try {
-                        newAmount = Double.parseDouble(newAmountStr);
-                        if (newAmount <= 0) {
-                            Snackbar.make(dialogView, "Ngân sách phải là số dương.", Snackbar.LENGTH_SHORT).show();
-                            return;
+                        double newAmount = Double.parseDouble(newAmountStr);
+                        budget.setCategory(newCategory);
+                        budget.setAmount(newAmount);
+                        if (context instanceof MainActivity) {
+                            ((MainActivity) context).updateBudget(budget);
                         }
                     } catch (NumberFormatException e) {
-                        Snackbar.make(dialogView, "Số tiền không hợp lệ.", Snackbar.LENGTH_SHORT).show();
-                        return;
+                        Toast.makeText(context, "Số tiền không hợp lệ.", Toast.LENGTH_SHORT).show();
                     }
-
-                    budget.setCategory(newCategory);
-                    budget.setAmount(newAmount);
-
-                    ((MainActivity) context).updateBudget(budget);
-                    Snackbar.make(dialogView, "Đã cập nhật ngân sách.", Snackbar.LENGTH_SHORT).show();
                 })
-                .setNegativeButton("Hủy", (dialog, which) -> dialog.dismiss());
+                .setNegativeButton("Hủy", null);
 
-        AlertDialog dialog = builder.create();
-        dialog.show();
+        builder.create().show();
     }
 }

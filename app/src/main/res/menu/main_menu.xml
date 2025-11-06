@@ -1,9 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
-    <!-- Mục menu để đăng xuất -->
+
+    <item
+        android:id="@+id/action_bills"
+        android:title="Quản lý Hóa đơn"
+        android:icon="@drawable/ic_receipt"
+        app:showAsAction="ifRoom" />
+
+    <item
+        android:id="@+id/action_ai_insights"
+        android:title="Gợi ý từ AI"
+        android:icon="@drawable/ic_ai_insights"
+        app:showAsAction="ifRoom" />
+
     <item
         android:id="@+id/action_sign_out"
         android:title="Đăng xuất"
         app:showAsAction="never" />
+
 </menu>

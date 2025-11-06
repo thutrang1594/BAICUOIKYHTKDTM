@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">Money Management App</string>
-    <string name="default_web_client_id" translatable="false">YOUR_WEB_CLIENT_ID_HERE</string> <!-- Replace with your actual client ID -->
+    <string name="default_web_client_id" translatable="false">244605321682-9iakechluktt5tcmgd5hcl6cphve9vud.apps.googleusercontent.com</string> <!-- Replace with your actual client ID -->
 
     <!-- Mảng danh mục chi tiêu -->
     <string-array name="expense_categories">

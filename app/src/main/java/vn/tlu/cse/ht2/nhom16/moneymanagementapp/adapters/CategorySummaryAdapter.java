@@ -1,7 +1,6 @@
 package vn.tlu.cse.ht2.nhom16.moneymanagementapp.adapters;
 
 import android.content.Context;
-import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,20 +8,21 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
-
-import vn.tlu.cse.ht2.nhom16.moneymanagementapp.R;
-import vn.tlu.cse.ht2.nhom16.moneymanagementapp.models.CategorySummary;
 
 import java.text.DecimalFormat;
 import java.util.List;
+
+import vn.tlu.cse.ht2.nhom16.moneymanagementapp.R;
+import vn.tlu.cse.ht2.nhom16.moneymanagementapp.models.CategorySummary;
 
 public class CategorySummaryAdapter extends RecyclerView.Adapter<CategorySummaryAdapter.CategorySummaryViewHolder> {
 
     private List<CategorySummary> categorySummaryList;
     private DecimalFormat decimalFormat;
     private String currentCurrency;
-    private Context context; // Thêm context để truy cập tài nguyên drawable
+    private Context context;
 
     public CategorySummaryAdapter(List<CategorySummary> categorySummaryList, DecimalFormat decimalFormat, String currentCurrency) {
         this.categorySummaryList = categorySummaryList;
@@ -41,7 +41,7 @@ public class CategorySummaryAdapter extends RecyclerView.Adapter<CategorySummary
     @NonNull
     @Override
     public CategorySummaryViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        this.context = parent.getContext(); // Lấy context từ parent
+        this.context = parent.getContext();
         View view = LayoutInflater.from(context).inflate(R.layout.item_category_summary, parent, false);
         return new CategorySummaryViewHolder(view);
     }
@@ -51,11 +51,10 @@ public class CategorySummaryAdapter extends RecyclerView.Adapter<CategorySummary
         CategorySummary summary = categorySummaryList.get(position);
         holder.tvCategoryName.setText(summary.getCategoryName());
         holder.tvCategoryPercentage.setText(String.format("%.2f%%", summary.getPercentage()));
-        holder.tvCategoryAmount.setText(String.format("%s %s", decimalFormat.format(-summary.getAmount()), currentCurrency)); // Chi tiêu nên hiển thị số âm
+        holder.tvCategoryAmount.setText(String.format("%s %s", decimalFormat.format(-summary.getAmount()), currentCurrency));
 
-        holder.tvCategoryAmount.setTextColor(context.getResources().getColor(R.color.red_expense));
+        holder.tvCategoryAmount.setTextColor(ContextCompat.getColor(context, R.color.expense_color));
 
-        // Thiết lập icon tùy thuộc vào danh mục
         holder.ivCategoryIcon.setImageResource(getCategoryIcon(summary.getCategoryName()));
     }
 
@@ -77,28 +76,24 @@ public class CategorySummaryAdapter extends RecyclerView.Adapter<CategorySummary
         }
     }
 
-    // Phương thức để trả về icon drawable ID dựa trên tên danh mục
     private int getCategoryIcon(String categoryName) {
         switch (categoryName) {
             case "Ăn uống":
                 return R.drawable.ic_category_food;
             case "Đi lại":
                 return R.drawable.ic_category_transport;
-            // Thêm các trường hợp khác cho các danh mục khác
-            case "Nhà ở": // Giả định có ic_category_home.xml
-            case "Mua sắm": // Giả định có ic_category_shopping.xml
-            case "Giải trí": // Giả định có ic_category_entertainment.xml
-            case "Hóa đơn": // Giả định có ic_category_bills.xml
-            case "Giáo dục": // Giả định có ic_category_education.xml
-            case "Sức khỏe": // Giả định có ic_category_health.xml
-            case "Quà tặng": // Giả định có ic_category_gift.xml
-            case "Lương": // Giả định có ic_income_salary.xml
-            case "Thưởng": // Giả định có ic_income_bonus.xml
-            case "Đầu tư": // Giả định có ic_income_investment.xml
-                // Nếu bạn có các icon cụ thể cho những cái này, hãy thêm vào đây
-                // Ví dụ: return R.drawable.ic_category_home;
+            case "Nhà ở":
+            case "Mua sắm":
+            case "Giải trí":
+            case "Hóa đơn":
+            case "Giáo dục":
+            case "Sức khỏe":
+            case "Quà tặng":
+            case "Lương":
+            case "Thưởng":
+            case "Đầu tư":
             default:
-                return R.drawable.ic_category_default; // Icon mặc định nếu không khớp
+                return R.drawable.ic_category_default;
         }
     }
 }
