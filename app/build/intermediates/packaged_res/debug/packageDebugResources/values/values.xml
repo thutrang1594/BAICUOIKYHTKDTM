@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="expense_categories">
+        <item>Ăn uống</item>
+        <item>Nhà ở</item>
+        <item>Đi lại</item>
+        <item>Mua sắm</item>
+        <item>Giải trí</item>
+        <item>Hóa đơn</item>
+        <item>Giáo dục</item>
+        <item>Sức khỏe</item>
+        <item>Quà tặng</item>
+        <item>Khác</item>
+    </string-array>
+    <string-array name="income_categories">
+        <item>Lương</item>
+        <item>Thưởng</item>
+        <item>Đầu tư</item>
+        <item>Quà tặng</item>
+        <item>Khác</item>
+    </string-array>
+    <color name="expense_color">#D32F2F</color>
+    <color name="gray_text">#888888</color>
+    <color name="income_color">#008000</color>
+    <color name="md_theme_background">#FFFBFE</color>
+    <color name="md_theme_error">#B3261E</color>
+    <color name="md_theme_errorContainer">#F9DEDC</color>
+    <color name="md_theme_inverseOnSurface">#F4EFF4</color>
+    <color name="md_theme_inversePrimary">#D0BCFF</color>
+    <color name="md_theme_inverseSurface">#313033</color>
+    <color name="md_theme_onBackground">#1C1B1F</color>
+    <color name="md_theme_onError">#FFFFFF</color>
+    <color name="md_theme_onErrorContainer">#410E0B</color>
+    <color name="md_theme_onPrimary">#FFFFFF</color>
+    <color name="md_theme_onPrimaryContainer">#21005D</color>
+    <color name="md_theme_onSecondary">#FFFFFF</color>
+    <color name="md_theme_onSecondaryContainer">#1D192B</color>
+    <color name="md_theme_onSurface">#1C1B1F</color>
+    <color name="md_theme_onSurfaceVariant">#49454F</color>
+    <color name="md_theme_onTertiary">#FFFFFF</color>
+    <color name="md_theme_onTertiaryContainer">#31111D</color>
+    <color name="md_theme_outline">#79747E</color>
+    <color name="md_theme_primary">#6750A4</color>
+    <color name="md_theme_primaryContainer">#EADDFF</color>
+    <color name="md_theme_secondary">#625B71</color>
+    <color name="md_theme_secondaryContainer">#E8DEF8</color>
+    <color name="md_theme_shadow">#000000</color>
+    <color name="md_theme_surface">#FFFBFE</color>
+    <color name="md_theme_surfaceVariant">#E7E0EC</color>
+    <color name="md_theme_tertiary">#7D5260</color>
+    <color name="md_theme_tertiaryContainer">#FFD8E4</color>
+    <string name="app_name">Money Management App</string>
+    <string name="default_web_client_id" translatable="false">244605321682-9iakechluktt5tcmgd5hcl6cphve9vud.apps.googleusercontent.com</string>
+    <string name="gcm_defaultSenderId" translatable="false">244605321682</string>
+    <string name="google_api_key" translatable="false">AIzaSyDBCFnb55DICqeJatZsDCYYOyjkchjG6Hg</string>
+    <string name="google_app_id" translatable="false">1:244605321682:android:ab7f5bd83d7cd68b5a880b</string>
+    <string name="google_crash_reporting_api_key" translatable="false">AIzaSyDBCFnb55DICqeJatZsDCYYOyjkchjG6Hg</string>
+    <string name="google_storage_bucket" translatable="false">moneymanagementapp-71587.firebasestorage.app</string>
+    <string name="project_id" translatable="false">moneymanagementapp-71587</string>
+    <style name="Base.Theme.MoneyManagement" parent="Theme.Material3.DayNight.NoActionBar">
+        
+        <item name="colorPrimary">@color/md_theme_primary</item>
+        <item name="colorOnPrimary">@color/md_theme_onPrimary</item>
+        <item name="colorPrimaryContainer">@color/md_theme_primaryContainer</item>
+        <item name="colorOnPrimaryContainer">@color/md_theme_onPrimaryContainer</item>
+        
+        <item name="colorSecondary">@color/md_theme_secondary</item>
+        <item name="colorOnSecondary">@color/md_theme_onSecondary</item>
+        <item name="colorSecondaryContainer">@color/md_theme_secondaryContainer</item>
+        <item name="colorOnSecondaryContainer">@color/md_theme_onSecondaryContainer</item>
+        
+        <item name="colorTertiary">@color/md_theme_tertiary</item>
+        <item name="colorOnTertiary">@color/md_theme_onTertiary</item>
+        <item name="colorTertiaryContainer">@color/md_theme_tertiaryContainer</item>
+        <item name="colorOnTertiaryContainer">@color/md_theme_onTertiaryContainer</item>
+        
+        <item name="colorError">@color/md_theme_error</item>
+        <item name="colorOnError">@color/md_theme_onError</item>
+        <item name="colorErrorContainer">@color/md_theme_errorContainer</item>
+        <item name="colorOnErrorContainer">@color/md_theme_onErrorContainer</item>
+        
+        <item name="android:colorBackground">@color/md_theme_background</item>
+        <item name="colorOnBackground">@color/md_theme_onBackground</item>
+        <item name="colorSurface">@color/md_theme_surface</item>
+        <item name="colorOnSurface">@color/md_theme_onSurface</item>
+        <item name="colorSurfaceVariant">@color/md_theme_surfaceVariant</item>
+        <item name="colorOnSurfaceVariant">@color/md_theme_onSurfaceVariant</item>
+        
+        <item name="colorOutline">@color/md_theme_outline</item>
+
+        
+        <item name="android:statusBarColor">?attr/colorPrimary</item>
+
+    </style>
+    <style name="Theme.MoneyManagement" parent="Base.Theme.MoneyManagement"/>
+</resources>

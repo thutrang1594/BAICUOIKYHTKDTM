@@ -1,0 +1,230 @@
+[
+    {
+        "merged": "C:\\Users\\Admin\\.gradle\\daemon\\8.10.2\\vn.tlu.cse.ht2.nhom16.moneymanagementapp-debug-50:\\anim_slide_in_left.xml.flat",
+        "source": "C:\\Users\\Admin\\.gradle\\daemon\\8.10.2\\vn.tlu.cse.ht2.nhom16.moneymanagementapp-main-52:\\anim\\slide_in_left.xml"
+    },
+    {
+        "merged": "C:\\Users\\Admin\\.gradle\\daemon\\8.10.2\\vn.tlu.cse.ht2.nhom16.moneymanagementapp-debug-50:\\drawable_rounded_edittext_bg.xml.flat",
+        "source": "C:\\Users\\Admin\\.gradle\\daemon\\8.10.2\\vn.tlu.cse.ht2.nhom16.moneymanagementapp-main-52:\\drawable\\rounded_edittext_bg.xml"
+    },
+    {
+        "merged": "C:\\Users\\Admin\\.gradle\\daemon\\8.10.2\\vn.tlu.cse.ht2.nhom16.moneymanagementapp-debug-50:\\mipmap-anydpi_ic_launcher.xml.flat",
+        "source": "C:\\Users\\Admin\\.gradle\\daemon\\8.10.2\\vn.tlu.cse.ht2.nhom16.moneymanagementapp-main-52:\\mipmap-anydpi\\ic_launcher.xml"
+    },
+    {
+        "merged": "C:\\Users\\Admin\\.gradle\\daemon\\8.10.2\\vn.tlu.cse.ht2.nhom16.moneymanagementapp-debug-50:\\drawable_ic_receipt.xml.flat",
+        "source": "C:\\Users\\Admin\\.gradle\\daemon\\8.10.2\\vn.tlu.cse.ht2.nhom16.moneymanagementapp-main-52:\\drawable\\ic_receipt.xml"
+    },
+    {
+        "merged": "C:\\Users\\Admin\\.gradle\\daemon\\8.10.2\\vn.tlu.cse.ht2.nhom16.moneymanagementapp-debug-50:\\layout_dialog_add_transaction.xml.flat",
+        "source": "C:\\Users\\Admin\\.gradle\\daemon\\8.10.2\\vn.tlu.cse.ht2.nhom16.moneymanagementapp-main-52:\\layout\\dialog_add_transaction.xml"
+    },
+    {
+        "merged": "C:\\Users\\Admin\\.gradle\\daemon\\8.10.2\\vn.tlu.cse.ht2.nhom16.moneymanagementapp-debug-50:\\layout_item_category_summary.xml.flat",
+        "source": "C:\\Users\\Admin\\.gradle\\daemon\\8.10.2\\vn.tlu.cse.ht2.nhom16.moneymanagementapp-main-52:\\layout\\item_category_summary.xml"
+    },
+    {
+        "merged": "C:\\Users\\Admin\\.gradle\\daemon\\8.10.2\\vn.tlu.cse.ht2.nhom16.moneymanagementapp-debug-50:\\anim_slide_out_left.xml.flat",
+        "source": "C:\\Users\\Admin\\.gradle\\daemon\\8.10.2\\vn.tlu.cse.ht2.nhom16.moneymanagementapp-main-52:\\anim\\slide_out_left.xml"
+    },
+    {
+        "merged": "C:\\Users\\Admin\\.gradle\\daemon\\8.10.2\\vn.tlu.cse.ht2.nhom16.moneymanagementapp-debug-50:\\drawable_ic_history.xml.flat",
+        "source": "C:\\Users\\Admin\\.gradle\\daemon\\8.10.2\\vn.tlu.cse.ht2.nhom16.moneymanagementapp-main-52:\\drawable\\ic_history.xml"
+    },
+    {
+        "merged": "C:\\Users\\Admin\\.gradle\\daemon\\8.10.2\\vn.tlu.cse.ht2.nhom16.moneymanagementapp-debug-50:\\layout_fragment_budget.xml.flat",
+        "source": "C:\\Users\\Admin\\.gradle\\daemon\\8.10.2\\vn.tlu.cse.ht2.nhom16.moneymanagementapp-main-52:\\layout\\fragment_budget.xml"
+    },
+    {
+        "merged": "C:\\Users\\Admin\\.gradle\\daemon\\8.10.2\\vn.tlu.cse.ht2.nhom16.moneymanagementapp-debug-50:\\anim_slide_in_right.xml.flat",
+        "source": "C:\\Users\\Admin\\.gradle\\daemon\\8.10.2\\vn.tlu.cse.ht2.nhom16.moneymanagementapp-main-52:\\anim\\slide_in_right.xml"
+    },
+    {
+        "merged": "C:\\Users\\Admin\\.gradle\\daemon\\8.10.2\\vn.tlu.cse.ht2.nhom16.moneymanagementapp-debug-50:\\drawable_ic_launcher_foreground.xml.flat",
+        "source": "C:\\Users\\Admin\\.gradle\\daemon\\8.10.2\\vn.tlu.cse.ht2.nhom16.moneymanagementapp-main-52:\\drawable\\ic_launcher_foreground.xml"
+    },
+    {
+        "merged": "C:\\Users\\Admin\\.gradle\\daemon\\8.10.2\\vn.tlu.cse.ht2.nhom16.moneymanagementapp-debug-50:\\mipmap-hdpi_ic_launcher_round.webp.flat",
+        "source": "C:\\Users\\Admin\\.gradle\\daemon\\8.10.2\\vn.tlu.cse.ht2.nhom16.moneymanagementapp-main-52:\\mipmap-hdpi\\ic_launcher_round.webp"
+    },
+    {
+        "merged": "C:\\Users\\Admin\\.gradle\\daemon\\8.10.2\\vn.tlu.cse.ht2.nhom16.moneymanagementapp-debug-50:\\layout_fragment_home.xml.flat",
+        "source": "C:\\Users\\Admin\\.gradle\\daemon\\8.10.2\\vn.tlu.cse.ht2.nhom16.moneymanagementapp-main-52:\\layout\\fragment_home.xml"
+    },
+    {
+        "merged": "C:\\Users\\Admin\\.gradle\\daemon\\8.10.2\\vn.tlu.cse.ht2.nhom16.moneymanagementapp-debug-50:\\mipmap-xhdpi_ic_launcher.webp.flat",
+        "source": "C:\\Users\\Admin\\.gradle\\daemon\\8.10.2\\vn.tlu.cse.ht2.nhom16.moneymanagementapp-main-52:\\mipmap-xhdpi\\ic_launcher.webp"
+    },
+    {
+        "merged": "C:\\Users\\Admin\\.gradle\\daemon\\8.10.2\\vn.tlu.cse.ht2.nhom16.moneymanagementapp-debug-50:\\drawable_ic_home.xml.flat",
+        "source": "C:\\Users\\Admin\\.gradle\\daemon\\8.10.2\\vn.tlu.cse.ht2.nhom16.moneymanagementapp-main-52:\\drawable\\ic_home.xml"
+    },
+    {
+        "merged": "C:\\Users\\Admin\\.gradle\\daemon\\8.10.2\\vn.tlu.cse.ht2.nhom16.moneymanagementapp-debug-50:\\drawable_ic_category_placeholder.xml.flat",
+        "source": "C:\\Users\\Admin\\.gradle\\daemon\\8.10.2\\vn.tlu.cse.ht2.nhom16.moneymanagementapp-main-52:\\drawable\\ic_category_placeholder.xml"
+    },
+    {
+        "merged": "C:\\Users\\Admin\\.gradle\\daemon\\8.10.2\\vn.tlu.cse.ht2.nhom16.moneymanagementapp-debug-50:\\layout_dialog_add_edit_bill.xml.flat",
+        "source": "C:\\Users\\Admin\\.gradle\\daemon\\8.10.2\\vn.tlu.cse.ht2.nhom16.moneymanagementapp-main-52:\\layout\\dialog_add_edit_bill.xml"
+    },
+    {
+        "merged": "C:\\Users\\Admin\\.gradle\\daemon\\8.10.2\\vn.tlu.cse.ht2.nhom16.moneymanagementapp-debug-50:\\drawable_ic_income_arrow.xml.flat",
+        "source": "C:\\Users\\Admin\\.gradle\\daemon\\8.10.2\\vn.tlu.cse.ht2.nhom16.moneymanagementapp-main-52:\\drawable\\ic_income_arrow.xml"
+    },
+    {
+        "merged": "C:\\Users\\Admin\\.gradle\\daemon\\8.10.2\\vn.tlu.cse.ht2.nhom16.moneymanagementapp-debug-50:\\drawable_ic_category_default.xml.flat",
+        "source": "C:\\Users\\Admin\\.gradle\\daemon\\8.10.2\\vn.tlu.cse.ht2.nhom16.moneymanagementapp-main-52:\\drawable\\ic_category_default.xml"
+    },
+    {
+        "merged": "C:\\Users\\Admin\\.gradle\\daemon\\8.10.2\\vn.tlu.cse.ht2.nhom16.moneymanagementapp-debug-50:\\menu_main_menu.xml.flat",
+        "source": "C:\\Users\\Admin\\.gradle\\daemon\\8.10.2\\vn.tlu.cse.ht2.nhom16.moneymanagementapp-main-52:\\menu\\main_menu.xml"
+    },
+    {
+        "merged": "C:\\Users\\Admin\\.gradle\\daemon\\8.10.2\\vn.tlu.cse.ht2.nhom16.moneymanagementapp-debug-50:\\mipmap-xxhdpi_ic_launcher.webp.flat",
+        "source": "C:\\Users\\Admin\\.gradle\\daemon\\8.10.2\\vn.tlu.cse.ht2.nhom16.moneymanagementapp-main-52:\\mipmap-xxhdpi\\ic_launcher.webp"
+    },
+    {
+        "merged": "C:\\Users\\Admin\\.gradle\\daemon\\8.10.2\\vn.tlu.cse.ht2.nhom16.moneymanagementapp-debug-50:\\drawable_ic_launcher_background.xml.flat",
+        "source": "C:\\Users\\Admin\\.gradle\\daemon\\8.10.2\\vn.tlu.cse.ht2.nhom16.moneymanagementapp-main-52:\\drawable\\ic_launcher_background.xml"
+    },
+    {
+        "merged": "C:\\Users\\Admin\\.gradle\\daemon\\8.10.2\\vn.tlu.cse.ht2.nhom16.moneymanagementapp-debug-50:\\drawable_ic_category_transport.xml.flat",
+        "source": "C:\\Users\\Admin\\.gradle\\daemon\\8.10.2\\vn.tlu.cse.ht2.nhom16.moneymanagementapp-main-52:\\drawable\\ic_category_transport.xml"
+    },
+    {
+        "merged": "C:\\Users\\Admin\\.gradle\\daemon\\8.10.2\\vn.tlu.cse.ht2.nhom16.moneymanagementapp-debug-50:\\mipmap-xhdpi_ic_launcher_round.webp.flat",
+        "source": "C:\\Users\\Admin\\.gradle\\daemon\\8.10.2\\vn.tlu.cse.ht2.nhom16.moneymanagementapp-main-52:\\mipmap-xhdpi\\ic_launcher_round.webp"
+    },
+    {
+        "merged": "C:\\Users\\Admin\\.gradle\\daemon\\8.10.2\\vn.tlu.cse.ht2.nhom16.moneymanagementapp-debug-50:\\mipmap-xxhdpi_ic_launcher_round.webp.flat",
+        "source": "C:\\Users\\Admin\\.gradle\\daemon\\8.10.2\\vn.tlu.cse.ht2.nhom16.moneymanagementapp-main-52:\\mipmap-xxhdpi\\ic_launcher_round.webp"
+    },
+    {
+        "merged": "C:\\Users\\Admin\\.gradle\\daemon\\8.10.2\\vn.tlu.cse.ht2.nhom16.moneymanagementapp-debug-50:\\layout_activity_register.xml.flat",
+        "source": "C:\\Users\\Admin\\.gradle\\daemon\\8.10.2\\vn.tlu.cse.ht2.nhom16.moneymanagementapp-main-52:\\layout\\activity_register.xml"
+    },
+    {
+        "merged": "C:\\Users\\Admin\\.gradle\\daemon\\8.10.2\\vn.tlu.cse.ht2.nhom16.moneymanagementapp-debug-50:\\mipmap-mdpi_ic_launcher.webp.flat",
+        "source": "C:\\Users\\Admin\\.gradle\\daemon\\8.10.2\\vn.tlu.cse.ht2.nhom16.moneymanagementapp-main-52:\\mipmap-mdpi\\ic_launcher.webp"
+    },
+    {
+        "merged": "C:\\Users\\Admin\\.gradle\\daemon\\8.10.2\\vn.tlu.cse.ht2.nhom16.moneymanagementapp-debug-50:\\drawable_ic_add.xml.flat",
+        "source": "C:\\Users\\Admin\\.gradle\\daemon\\8.10.2\\vn.tlu.cse.ht2.nhom16.moneymanagementapp-main-52:\\drawable\\ic_add.xml"
+    },
+    {
+        "merged": "C:\\Users\\Admin\\.gradle\\daemon\\8.10.2\\vn.tlu.cse.ht2.nhom16.moneymanagementapp-debug-50:\\layout_fragment_history.xml.flat",
+        "source": "C:\\Users\\Admin\\.gradle\\daemon\\8.10.2\\vn.tlu.cse.ht2.nhom16.moneymanagementapp-main-52:\\layout\\fragment_history.xml"
+    },
+    {
+        "merged": "C:\\Users\\Admin\\.gradle\\daemon\\8.10.2\\vn.tlu.cse.ht2.nhom16.moneymanagementapp-debug-50:\\menu_bottom_nav_menu.xml.flat",
+        "source": "C:\\Users\\Admin\\.gradle\\daemon\\8.10.2\\vn.tlu.cse.ht2.nhom16.moneymanagementapp-main-52:\\menu\\bottom_nav_menu.xml"
+    },
+    {
+        "merged": "C:\\Users\\Admin\\.gradle\\daemon\\8.10.2\\vn.tlu.cse.ht2.nhom16.moneymanagementapp-debug-50:\\drawable_ic_expense_arrow.xml.flat",
+        "source": "C:\\Users\\Admin\\.gradle\\daemon\\8.10.2\\vn.tlu.cse.ht2.nhom16.moneymanagementapp-main-52:\\drawable\\ic_expense_arrow.xml"
+    },
+    {
+        "merged": "C:\\Users\\Admin\\.gradle\\daemon\\8.10.2\\vn.tlu.cse.ht2.nhom16.moneymanagementapp-debug-50:\\layout_fragment_bill.xml.flat",
+        "source": "C:\\Users\\Admin\\.gradle\\daemon\\8.10.2\\vn.tlu.cse.ht2.nhom16.moneymanagementapp-main-52:\\layout\\fragment_bill.xml"
+    },
+    {
+        "merged": "vn.tlu.cse.ht2.nhom16.moneymanagementapp-debug-50:/layout_activity_main.xml.flat",
+        "source": "vn.tlu.cse.ht2.nhom16.moneymanagementapp-main-52:/layout/activity_main.xml"
+    },
+    {
+        "merged": "C:\\Users\\Admin\\.gradle\\daemon\\8.10.2\\vn.tlu.cse.ht2.nhom16.moneymanagementapp-debug-50:\\mipmap-anydpi_ic_launcher_round.xml.flat",
+        "source": "C:\\Users\\Admin\\.gradle\\daemon\\8.10.2\\vn.tlu.cse.ht2.nhom16.moneymanagementapp-main-52:\\mipmap-anydpi\\ic_launcher_round.xml"
+    },
+    {
+        "merged": "C:\\Users\\Admin\\.gradle\\daemon\\8.10.2\\vn.tlu.cse.ht2.nhom16.moneymanagementapp-debug-50:\\xml_backup_rules.xml.flat",
+        "source": "C:\\Users\\Admin\\.gradle\\daemon\\8.10.2\\vn.tlu.cse.ht2.nhom16.moneymanagementapp-main-52:\\xml\\backup_rules.xml"
+    },
+    {
+        "merged": "C:\\Users\\Admin\\.gradle\\daemon\\8.10.2\\vn.tlu.cse.ht2.nhom16.moneymanagementapp-debug-50:\\layout_item_budget.xml.flat",
+        "source": "C:\\Users\\Admin\\.gradle\\daemon\\8.10.2\\vn.tlu.cse.ht2.nhom16.moneymanagementapp-main-52:\\layout\\item_budget.xml"
+    },
+    {
+        "merged": "C:\\Users\\Admin\\.gradle\\daemon\\8.10.2\\vn.tlu.cse.ht2.nhom16.moneymanagementapp-debug-50:\\layout_activity_login.xml.flat",
+        "source": "C:\\Users\\Admin\\.gradle\\daemon\\8.10.2\\vn.tlu.cse.ht2.nhom16.moneymanagementapp-main-52:\\layout\\activity_login.xml"
+    },
+    {
+        "merged": "C:\\Users\\Admin\\.gradle\\daemon\\8.10.2\\vn.tlu.cse.ht2.nhom16.moneymanagementapp-debug-50:\\drawable_ic_budget.xml.flat",
+        "source": "C:\\Users\\Admin\\.gradle\\daemon\\8.10.2\\vn.tlu.cse.ht2.nhom16.moneymanagementapp-main-52:\\drawable\\ic_budget.xml"
+    },
+    {
+        "merged": "C:\\Users\\Admin\\.gradle\\daemon\\8.10.2\\vn.tlu.cse.ht2.nhom16.moneymanagementapp-debug-50:\\layout_item_bill.xml.flat",
+        "source": "C:\\Users\\Admin\\.gradle\\daemon\\8.10.2\\vn.tlu.cse.ht2.nhom16.moneymanagementapp-main-52:\\layout\\item_bill.xml"
+    },
+    {
+        "merged": "C:\\Users\\Admin\\.gradle\\daemon\\8.10.2\\vn.tlu.cse.ht2.nhom16.moneymanagementapp-debug-50:\\mipmap-xxxhdpi_ic_launcher_round.webp.flat",
+        "source": "C:\\Users\\Admin\\.gradle\\daemon\\8.10.2\\vn.tlu.cse.ht2.nhom16.moneymanagementapp-main-52:\\mipmap-xxxhdpi\\ic_launcher_round.webp"
+    },
+    {
+        "merged": "C:\\Users\\Admin\\.gradle\\daemon\\8.10.2\\vn.tlu.cse.ht2.nhom16.moneymanagementapp-debug-50:\\xml_data_extraction_rules.xml.flat",
+        "source": "C:\\Users\\Admin\\.gradle\\daemon\\8.10.2\\vn.tlu.cse.ht2.nhom16.moneymanagementapp-main-52:\\xml\\data_extraction_rules.xml"
+    },
+    {
+        "merged": "C:\\Users\\Admin\\.gradle\\daemon\\8.10.2\\vn.tlu.cse.ht2.nhom16.moneymanagementapp-debug-50:\\layout_activity_main.xml.flat",
+        "source": "C:\\Users\\Admin\\.gradle\\daemon\\8.10.2\\vn.tlu.cse.ht2.nhom16.moneymanagementapp-main-52:\\layout\\activity_main.xml"
+    },
+    {
+        "merged": "C:\\Users\\Admin\\.gradle\\daemon\\8.10.2\\vn.tlu.cse.ht2.nhom16.moneymanagementapp-debug-50:\\drawable_ic_income_salary.xml.flat",
+        "source": "C:\\Users\\Admin\\.gradle\\daemon\\8.10.2\\vn.tlu.cse.ht2.nhom16.moneymanagementapp-main-52:\\drawable\\ic_income_salary.xml"
+    },
+    {
+        "merged": "C:\\Users\\Admin\\.gradle\\daemon\\8.10.2\\vn.tlu.cse.ht2.nhom16.moneymanagementapp-debug-50:\\mipmap-mdpi_ic_launcher_round.webp.flat",
+        "source": "C:\\Users\\Admin\\.gradle\\daemon\\8.10.2\\vn.tlu.cse.ht2.nhom16.moneymanagementapp-main-52:\\mipmap-mdpi\\ic_launcher_round.webp"
+    },
+    {
+        "merged": "C:\\Users\\Admin\\.gradle\\daemon\\8.10.2\\vn.tlu.cse.ht2.nhom16.moneymanagementapp-debug-50:\\layout_fragment_statistics.xml.flat",
+        "source": "C:\\Users\\Admin\\.gradle\\daemon\\8.10.2\\vn.tlu.cse.ht2.nhom16.moneymanagementapp-main-52:\\layout\\fragment_statistics.xml"
+    },
+    {
+        "merged": "C:\\Users\\Admin\\.gradle\\daemon\\8.10.2\\vn.tlu.cse.ht2.nhom16.moneymanagementapp-debug-50:\\anim_slide_out_right.xml.flat",
+        "source": "C:\\Users\\Admin\\.gradle\\daemon\\8.10.2\\vn.tlu.cse.ht2.nhom16.moneymanagementapp-main-52:\\anim\\slide_out_right.xml"
+    },
+    {
+        "merged": "C:\\Users\\Admin\\.gradle\\daemon\\8.10.2\\vn.tlu.cse.ht2.nhom16.moneymanagementapp-debug-50:\\drawable_ic_gemini.xml.flat",
+        "source": "C:\\Users\\Admin\\.gradle\\daemon\\8.10.2\\vn.tlu.cse.ht2.nhom16.moneymanagementapp-main-52:\\drawable\\ic_gemini.xml"
+    },
+    {
+        "merged": "C:\\Users\\Admin\\.gradle\\daemon\\8.10.2\\vn.tlu.cse.ht2.nhom16.moneymanagementapp-debug-50:\\mipmap-xxxhdpi_ic_launcher.webp.flat",
+        "source": "C:\\Users\\Admin\\.gradle\\daemon\\8.10.2\\vn.tlu.cse.ht2.nhom16.moneymanagementapp-main-52:\\mipmap-xxxhdpi\\ic_launcher.webp"
+    },
+    {
+        "merged": "C:\\Users\\Admin\\.gradle\\daemon\\8.10.2\\vn.tlu.cse.ht2.nhom16.moneymanagementapp-debug-50:\\mipmap-hdpi_ic_launcher.webp.flat",
+        "source": "C:\\Users\\Admin\\.gradle\\daemon\\8.10.2\\vn.tlu.cse.ht2.nhom16.moneymanagementapp-main-52:\\mipmap-hdpi\\ic_launcher.webp"
+    },
+    {
+        "merged": "C:\\Users\\Admin\\.gradle\\daemon\\8.10.2\\vn.tlu.cse.ht2.nhom16.moneymanagementapp-debug-50:\\layout_item_expense.xml.flat",
+        "source": "C:\\Users\\Admin\\.gradle\\daemon\\8.10.2\\vn.tlu.cse.ht2.nhom16.moneymanagementapp-main-52:\\layout\\item_expense.xml"
+    },
+    {
+        "merged": "C:\\Users\\Admin\\.gradle\\daemon\\8.10.2\\vn.tlu.cse.ht2.nhom16.moneymanagementapp-debug-50:\\layout_dialog_edit_budget.xml.flat",
+        "source": "C:\\Users\\Admin\\.gradle\\daemon\\8.10.2\\vn.tlu.cse.ht2.nhom16.moneymanagementapp-main-52:\\layout\\dialog_edit_budget.xml"
+    },
+    {
+        "merged": "C:\\Users\\Admin\\.gradle\\daemon\\8.10.2\\vn.tlu.cse.ht2.nhom16.moneymanagementapp-debug-50:\\drawable_ic_category_food.xml.flat",
+        "source": "C:\\Users\\Admin\\.gradle\\daemon\\8.10.2\\vn.tlu.cse.ht2.nhom16.moneymanagementapp-main-52:\\drawable\\ic_category_food.xml"
+    },
+    {
+        "merged": "C:\\Users\\Admin\\.gradle\\daemon\\8.10.2\\vn.tlu.cse.ht2.nhom16.moneymanagementapp-debug-50:\\drawable_ic_ai_insights.xml.flat",
+        "source": "C:\\Users\\Admin\\.gradle\\daemon\\8.10.2\\vn.tlu.cse.ht2.nhom16.moneymanagementapp-main-52:\\drawable\\ic_ai_insights.xml"
+    },
+    {
+        "merged": "C:\\Users\\Admin\\.gradle\\daemon\\8.10.2\\vn.tlu.cse.ht2.nhom16.moneymanagementapp-debug-50:\\layout_dialog_edit_expense.xml.flat",
+        "source": "C:\\Users\\Admin\\.gradle\\daemon\\8.10.2\\vn.tlu.cse.ht2.nhom16.moneymanagementapp-main-52:\\layout\\dialog_edit_expense.xml"
+    },
+    {
+        "merged": "C:\\Users\\Admin\\.gradle\\daemon\\8.10.2\\vn.tlu.cse.ht2.nhom16.moneymanagementapp-debug-50:\\layout_fragment_ai_insights.xml.flat",
+        "source": "C:\\Users\\Admin\\.gradle\\daemon\\8.10.2\\vn.tlu.cse.ht2.nhom16.moneymanagementapp-main-52:\\layout\\fragment_ai_insights.xml"
+    },
+    {
+        "merged": "C:\\Users\\Admin\\.gradle\\daemon\\8.10.2\\vn.tlu.cse.ht2.nhom16.moneymanagementapp-debug-50:\\drawable_ic_statistics.xml.flat",
+        "source": "C:\\Users\\Admin\\.gradle\\daemon\\8.10.2\\vn.tlu.cse.ht2.nhom16.moneymanagementapp-main-52:\\drawable\\ic_statistics.xml"
+    },
+    {
+        "merged": "C:\\Users\\Admin\\.gradle\\daemon\\8.10.2\\vn.tlu.cse.ht2.nhom16.moneymanagementapp-debug-50:\\drawable_tlu_logo.jpg.flat",
+        "source": "C:\\Users\\Admin\\.gradle\\daemon\\8.10.2\\vn.tlu.cse.ht2.nhom16.moneymanagementapp-main-52:\\drawable\\tlu_logo.jpg"
+    }
+]

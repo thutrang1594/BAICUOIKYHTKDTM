@@ -1,0 +1,19 @@
+{
+    "logs": [
+        {
+            "outputFile": "vn.tlu.cse.ht2.nhom16.moneymanagementapp-mergeDebugResources-48:/values-v18/values-v18.xml",
+            "map": [
+                {
+                    "source": "C:\\Users\\Admin\\.gradle\\caches\\8.10.2\\transforms\\45a70c0247fdd9e68faa35da58bc3318\\transformed\\appcompat-1.7.1\\res\\values-v18\\values-v18.xml",
+                    "from": {
+                        "startLines": "2",
+                        "startColumns": "4",
+                        "startOffsets": "55",
+                        "endColumns": "48",
+                        "endOffsets": "99"
+                    }
+                }
+            ]
+        }
+    ]
+}
